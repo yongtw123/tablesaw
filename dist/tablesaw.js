@@ -1,4 +1,4 @@
-/*! Tablesaw - v0.1.6 - 2014-07-23
+/*! Tablesaw - v0.1.7 - 2014-10-21
 * https://github.com/filamentgroup/tablesaw
 * Copyright (c) 2014 Filament Group; Licensed MIT */
 ;(function( $ ) {
@@ -219,7 +219,10 @@
 	};
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode, colstart ){
+	$( document ).on( "tablesawcreate", function( e, mode, colstart ){
+		if( !(e.target && e.target.tagName === "TABLE") ){
+			return;
+		}
 		if( mode === 'stack' ){
 			var table = new Stack( this );
 			table.init( colstart );
@@ -227,7 +230,10 @@
 
 	} );
 
-	$( document ).on( "tablesawdestroy", "table", function( e, mode ){
+	$( document ).on( "tablesawdestroy", function( e, mode ){
+		if( !(e.target && e.target.tagName === "TABLE") ){
+			return;
+		}
 
 		if( mode === 'stack' ){
 			$( this ).data( data.obj ).destroy();
@@ -236,6 +242,7 @@
 	} );
 
 }( this, jQuery ));
+
 ;(function( $ ) {
 	var pluginName = "tablesawbtn",
 		initSelector = ".btn",
@@ -457,7 +464,10 @@
 	};
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode ){
+	$( document ).on( "tablesawcreate", function( e, mode ){
+		if( !(e.target && e.target.tagName === "TABLE") ){
+			return;
+		}
 
 		if( mode === 'columntoggle' ){
 			var table = new ColumnToggle( this );
@@ -466,13 +476,17 @@
 
 	} );
 
-	$( document ).on( "tablesawdestroy", "table", function( e, mode ){
+	$( document ).on( "tablesawdestroy", function( e, mode ){
+		if( !(e.target && e.target.tagName === "TABLE") ){
+			return;
+		}
 		if( mode === 'columntoggle' ){
 			$( this ).data( 'tablesaw-coltoggle' ).destroy();
 		}
 	} );
 
 }( this, jQuery ));
+
 ;(function( win, $, undefined ){
 
 
@@ -701,7 +715,10 @@
 
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode ){
+	$( document ).on( "tablesawcreate", function( e, mode ){
+		if( !(e.target && e.target.tagName === "TABLE") ){
+			return;
+		}
 
 		var $table = $( this );
 		if( mode === 'swipe' ){
@@ -972,7 +989,10 @@
 	// add methods
 	$.extend( $.fn[ pluginName ].prototype, methods );
 
-	$( document ).on( "tablesawcreate", "table", function() {
+	$( document ).on( "tablesawcreate", function(e) {
+		if( !(e.target && e.target.tagName === "TABLE") ){
+			return;
+		}
 		if( $( this ).is( initSelector ) ) {
 			$( this )[ pluginName ]();
 		}
@@ -1045,7 +1065,10 @@
 
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode ){
+	$( document ).on( "tablesawcreate", function( e, mode ){
+		if( !(e.target && e.target.tagName === "TABLE") ){
+			return;
+		}
 
 		var $table = $( this );
 		if( ( mode === 'swipe' || mode === 'columntoggle' ) && $table.is( '[ ' + MM.attr.init + ']' ) ){
@@ -1129,7 +1152,10 @@
 		}
 	};
 
-	$( win.document ).on( "tablesawcreate", "table", function() {
+	$( win.document ).on( "tablesawcreate", function(e) {
+		if( !(e.target && e.target.tagName === "TABLE") ){
+			return;
+		}
 		if( $( this ).is( S.selectors.init ) ) {
 			S.init( this );
 		}

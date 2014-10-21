@@ -1,4 +1,4 @@
-/*! Tablesaw - v0.1.6 - 2014-07-23
+/*! Tablesaw - v0.1.7 - 2014-10-21
 * https://github.com/filamentgroup/tablesaw
 * Copyright (c) 2014 Filament Group; Licensed MIT */
 ;(function( $ ) {
@@ -219,7 +219,10 @@
 	};
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode, colstart ){
+	$( document ).on( "tablesawcreate", function( e, mode, colstart ){
+		if( !(e.target && e.target.tagName === "TABLE") ){
+			return;
+		}
 		if( mode === 'stack' ){
 			var table = new Stack( this );
 			table.init( colstart );
@@ -227,7 +230,10 @@
 
 	} );
 
-	$( document ).on( "tablesawdestroy", "table", function( e, mode ){
+	$( document ).on( "tablesawdestroy", function( e, mode ){
+		if( !(e.target && e.target.tagName === "TABLE") ){
+			return;
+		}
 
 		if( mode === 'stack' ){
 			$( this ).data( data.obj ).destroy();
