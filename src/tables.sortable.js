@@ -11,7 +11,7 @@
 				var $el = $( el );
 				if( $el.is( 'input, select' ) ) {
 					return $el.val();
-				} else if( $el.hasClass( 'tablesaw-cell-label' ) ) {
+				} else if( $el.is( '.tablesaw-cell-label' ) ) {
 					return;
 				}
 				return $.trim( $el.text() );
@@ -85,7 +85,7 @@
 							newSortValue = heads.index( head );
 
 						clearOthers( head.siblings() );
-						if( head.hasClass( classes.descend ) ){
+						if( head.is( "." + classes.descend ) ){
 							el[ pluginName ]( "sortBy" , v , true);
 							newSortValue += '_asc';
 						} else {
@@ -102,7 +102,7 @@
 						$.each( heads , function( idx , el ){
 							var $el = $( el );
 							if( $el.is( "[data-sortable-default-col]" ) ){
-								if( !$el.hasClass( classes.descend ) ) {
+								if( !$el.is( "." + classes.descend ) ) {
 									$el.addClass( classes.ascend );
 								}
 							}
@@ -116,7 +116,7 @@
 							heads.each(function( j ) {
 								var $t = $( this ),
 									isDefaultCol = $t.is( '[data-sortable-default-col]' ),
-									isDescending = $t.hasClass( classes.descend ),
+									isDescending = $t.is( "." + classes.descend ),
 									isNumeric = false;
 
 								// Check only the first three rows to see if the column is numbers.
