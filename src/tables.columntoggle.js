@@ -143,10 +143,7 @@
 	};
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", function( e, mode ){
-		if( !(e.target && e.target.tagName === "TABLE") ){
-			return;
-		}
+	$( document ).on( "tablesawcreate", "table", function( e, mode ){
 
 		if( mode === 'columntoggle' ){
 			var table = new ColumnToggle( this );
@@ -155,10 +152,7 @@
 
 	} );
 
-	$( document ).on( "tablesawdestroy", function( e, mode ){
-		if( !(e.target && e.target.tagName === "TABLE") ){
-			return;
-		}
+	$( document ).on( "tablesawdestroy", "table", function( e, mode ){
 		if( mode === 'columntoggle' ){
 			$( this ).data( 'tablesaw-coltoggle' ).destroy();
 		}

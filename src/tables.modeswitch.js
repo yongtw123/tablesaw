@@ -78,10 +78,7 @@
 		}
 	};
 
-	$( win.document ).on( "tablesawcreate", function(e) {
-		if( !(e.target && e.target.tagName === "TABLE") ){
-			return;
-		}
+	$( win.document ).on( "tablesawcreate", "table", function() {
 		if( $( this ).is( S.selectors.init ) ) {
 			S.init( this );
 		}

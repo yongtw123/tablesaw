@@ -72,10 +72,7 @@
 	};
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", function( e, mode, colstart ){
-		if( !(e.target && e.target.tagName === "TABLE") ){
-			return;
-		}
+	$( document ).on( "tablesawcreate", "table", function( e, mode, colstart ){
 		if( mode === 'stack' ){
 			var table = new Stack( this );
 			table.init( colstart );
@@ -83,10 +80,7 @@
 
 	} );
 
-	$( document ).on( "tablesawdestroy", function( e, mode ){
-		if( !(e.target && e.target.tagName === "TABLE") ){
-			return;
-		}
+	$( document ).on( "tablesawdestroy", "table", function( e, mode ){
 
 		if( mode === 'stack' ){
 			$( this ).data( data.obj ).destroy();
