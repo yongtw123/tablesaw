@@ -196,11 +196,11 @@
 
 		$sortButton.trigger( "click" );
 
-		equal( $table.find( 'tbody tr:eq(0) td:eq(1)' ).html(), '10', 'First row is sorted descending' );
+		equal( $table.find( 'tbody' ).find( 'tr:eq(0)' ).find( 'td:eq(1)' ).html(), '10', 'First row is sorted descending' );
 
 		$sortButton.trigger( "click" );
 
-		equal( $table.find( 'tbody tr:eq(0) td:eq(1)' ).html(), '1', 'First row is sorted ascending' );
+		equal( $table.find( 'tbody' ).find( 'tr:eq(0)' ).find( 'td:eq(1)' ).html(), '1', 'First row is sorted ascending' );
 	});
 
 	test( 'Sort works with floats', function() {
@@ -209,10 +209,10 @@
 			rows = $table.find( 'tbody tr' ).length;
 
 		$sortButton.trigger( "click" );
-		equal( $table.find( 'tbody tr:eq(' + (rows - 2 ) + ') td:eq(0)' ).text(), previousText, previousText + ' is in row ' + ( rows - 2 ) + ' of ' + rows + ' (descending)' );
+		equal( $table.find( 'tbody' ).find( 'tr:eq(' + (rows - 2 ) + ')' ).find( 'td:eq(0)' ).text(), previousText, previousText + ' is in row ' + ( rows - 2 ) + ' of ' + rows + ' (descending)' );
 
 		$sortButton.trigger( "click" );
-		equal( $table.find( 'tbody tr:eq(1) td:eq(0)' ).text(), previousText, previousText + ' is in the second row (ascending)' );
+		equal( $table.find( 'tbody' ).find( 'tr:eq(1)' ).find( 'td:eq(0)' ).text(), previousText, previousText + ' is in the second row (ascending)' );
 
 	});
 
@@ -221,10 +221,10 @@
 			$sortButton = $table.find( '.sortable-head button' ).eq( 0 );
 
 		$sortButton.trigger( "click" );
-		equal( $table.find( 'tbody tr:eq(0) td:eq(0)' ).text(), previousText, previousText + ' is in the first row (descending)' );
+		equal( $table.find( 'tbody' ).find( 'tr:eq(0) td:eq(0)' ).text(), previousText, previousText + ' is in the first row (descending)' );
 
 		$sortButton.trigger("click");
-		equal( $table.find( 'tbody tr:eq(4) td:eq(0)' ).text(), previousText, previousText + ' is in the third row (ascending)' );
+		equal( $table.find( 'tbody' ).find( 'tr:eq(4) td:eq(0)' ).text(), previousText, previousText + ' is in the third row (ascending)' );
 
 	});
 
@@ -250,11 +250,11 @@
 
 		$switcher.val( '1_desc' ).trigger( 'change' );
 
-		equal( $table.find( 'tbody tr:eq(0) td:eq(1)' ).html(), '10', 'First row is sorted descending' );
+		equal( $table.find( 'tbody' ).find( 'tr:eq(0) td:eq(1)' ).html(), '10', 'First row is sorted descending' );
 
 		$switcher.val( '1_asc' ).trigger( 'change' );
 
-		equal( $table.find( 'tbody tr:eq(0) td:eq(1)' ).html(), '1', 'First row is sorted ascending' );
+		equal( $table.find( 'tbody' ).find( 'tr:eq(0) td:eq(1)' ).html(), '1', 'First row is sorted ascending' );
 	});
 
 	module( 'tablesaw Mini Map', {
