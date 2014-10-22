@@ -67,7 +67,7 @@
 		onModeChange: function() {
 			var $t = $( this ),
 				$switcher = $t.closest( '.' + S.classes.main ),
-				$table = $t.closest( '.tablesaw-bar' ).nextUntil( $table ).eq( 0 ),
+				$table = $t.closest( '.tablesaw-bar' ).next(),
 				val = $t.val();
 
 			$switcher.remove();
