@@ -30,7 +30,8 @@
 
 		// Expose headers and allHeaders properties on the widget
 		// headers references the THs within the first TR in the table
-		this.headers = this.$table.find( 'tr:first > th' );
+		var firstRow = $( this.$table.find( 'tr' )[0] );
+		this.headers = firstRow.children( 'th' );
 
 		this.$table.data( 'tablesaw-coltoggle', this );
 	};
