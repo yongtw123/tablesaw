@@ -744,7 +744,7 @@
 			} else if( $el.is( '.tablesaw-cell-label' ) ) {
 				nodes.push(null);
 			} else {
-				nodes.push($.trim( $el.text() ));
+				nodes.push($el.text().replace(/^\s+|\s+$/g, ''));
 			}
 		});
 		return nodes.join( '' );
