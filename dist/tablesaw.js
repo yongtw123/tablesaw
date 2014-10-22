@@ -1,4 +1,4 @@
-/*! Tablesaw - v0.1.7 - 2014-10-21
+/*! Tablesaw - v0.1.7 - 2014-10-22
 * https://github.com/filamentgroup/tablesaw
 * Copyright (c) 2014 Filament Group; Licensed MIT */
 ;(function( $ ) {
@@ -117,7 +117,7 @@
 	};
 
 	Table.prototype.destroy = function() {
-		// Don’t remove the toolbar. Some of the table features are not yet destroy-friendly.
+		// Don't remove the toolbar. Some of the table features are not yet destroy-friendly.
 		this.$table.prev().filter( '.' + classes.toolbar ).each(function() {
 			this.className = this.className.replace( /\bmode\-\w*\b/gi, '' );
 		});
@@ -219,18 +219,23 @@
 	};
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode, colstart ){
+	$( document ).on( "tablesawcreate", function( e, mode, colstart ){
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
 		if( mode === 'stack' ){
-			var table = new Stack( this );
+			var table = new Stack( e.target );
 			table.init( colstart );
 		}
 
 	} );
 
-	$( document ).on( "tablesawdestroy", "table", function( e, mode ){
-
+	$( document ).on( "tablesawdestroy", function( e, mode ){
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
 		if( mode === 'stack' ){
-			$( this ).data( data.obj ).destroy();
+			$( e.target ).data( data.obj ).destroy();
 		}
 
 	} );
@@ -458,18 +463,24 @@
 	};
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode ){
+	$( document ).on( "tablesawcreate", function( e, mode ){
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
 
 		if( mode === 'columntoggle' ){
-			var table = new ColumnToggle( this );
+			var table = new ColumnToggle( e.target );
 			table.init();
 		}
 
 	} );
 
-	$( document ).on( "tablesawdestroy", "table", function( e, mode ){
+	$( document ).on( "tablesawdestroy", function( e, mode ){
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
 		if( mode === 'columntoggle' ){
-			$( this ).data( 'tablesaw-coltoggle' ).destroy();
+			$( e.target ).data( 'tablesaw-coltoggle' ).destroy();
 		}
 	} );
 
@@ -703,9 +714,12 @@
 
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode ){
+	$( document ).on( "tablesawcreate", function( e, mode ){
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
 
-		var $table = $( this );
+		var $table = $( e.target );
 		if( mode === 'swipe' ){
 			createSwipeTable( $table );
 		}
@@ -974,9 +988,12 @@
 	// add methods
 	$.extend( $.fn[ pluginName ].prototype, methods );
 
-	$( document ).on( "tablesawcreate", "table", function() {
-		if( $( this ).is( initSelector ) ) {
-			$( this )[ pluginName ]();
+	$( document ).on( "tablesawcreate", function(e) {
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
+		if( $( e.target ).is( initSelector ) ) {
+			$( e.target )[ pluginName ]();
 		}
 	});
 
@@ -1047,9 +1064,12 @@
 
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode ){
+	$( document ).on( "tablesawcreate", function( e, mode ){
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
 
-		var $table = $( this );
+		var $table = $( e.target );
 		if( ( mode === 'swipe' || mode === 'columntoggle' ) && $table.is( '[ ' + MM.attr.init + ']' ) ){
 			createMiniMap( $table );
 		}
@@ -1131,9 +1151,12 @@
 		}
 	};
 
-	$( win.document ).on( "tablesawcreate", "table", function() {
-		if( $( this ).is( S.selectors.init ) ) {
-			S.init( this );
+	$( win.document ).on( "tablesawcreate", function(e) {
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
+		if( $( e.target ).is( S.selectors.init ) ) {
+			S.init( e.target );
 		}
 	});
 

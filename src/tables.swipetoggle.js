@@ -233,9 +233,12 @@
 
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode ){
+	$( document ).on( "tablesawcreate", function( e, mode ){
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
 
-		var $table = $( this );
+		var $table = $( e.target );
 		if( mode === 'swipe' ){
 			createSwipeTable( $table );
 		}

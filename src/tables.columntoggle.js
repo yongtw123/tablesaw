@@ -143,18 +143,24 @@
 	};
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", "table", function( e, mode ){
+	$( document ).on( "tablesawcreate", function( e, mode ){
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
 
 		if( mode === 'columntoggle' ){
-			var table = new ColumnToggle( this );
+			var table = new ColumnToggle( e.target );
 			table.init();
 		}
 
 	} );
 
-	$( document ).on( "tablesawdestroy", "table", function( e, mode ){
+	$( document ).on( "tablesawdestroy", function( e, mode ){
+		if( !(e.target && e.target.tagName==="TABLE") ){
+			return;
+		}
 		if( mode === 'columntoggle' ){
-			$( this ).data( 'tablesaw-coltoggle' ).destroy();
+			$( e.target ).data( 'tablesaw-coltoggle' ).destroy();
 		}
 	} );
 
