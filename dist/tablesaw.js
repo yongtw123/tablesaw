@@ -508,7 +508,12 @@
 		// Calculate initial widths
 		$table.css('width', 'auto');
 		$headerCells.each(function() {
-			headerWidths.push( $( this ).outerWidth() );
+			var $this = $( this );
+			headerWidths.push( parseInt($this.width(),10) +
+												parseInt($this.css( 'padding-left' ),10) +
+												parseInt($this.css( 'padding-right' ),10) +
+												parseInt($this.css( 'border-left-width' ),10) +
+												parseInt($this.css( 'border-right-width' ),10));
 		});
 		$table.css( 'width', '' );
 
