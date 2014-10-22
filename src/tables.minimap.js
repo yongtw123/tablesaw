@@ -34,10 +34,14 @@
 
 		function showHideNav(){
 			if( !showMinimap( $table ) ) {
-				$btns.hide();
+				for( var i = 0, l = $btns.length; i < l; i++ ){
+					$btns[i].style.display = "none";
+				}
 				return;
 			}
-			$btns.show();
+			for( var ii = 0, ll = $btns.length; ii < ll; ii++ ){
+				$btns[ii].style.display = "block";
+			}
 
 			// show/hide dots
 			var dots = $dotNav.find( "li" ).removeClass( hideDot );
