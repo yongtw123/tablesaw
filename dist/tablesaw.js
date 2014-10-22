@@ -736,15 +736,18 @@
 
 ;(function( $ ) {
 	function getSortValue( cell ) {
-		return $.map( cell.childNodes, function( el ) {
-				var $el = $( el );
-				if( $el.is( 'input, select' ) ) {
-					return $el.val();
-				} else if( $el.is( '.tablesaw-cell-label' ) ) {
-					return;
-				}
-				return $.trim( $el.text() );
-			}).join( '' );
+		var nodes = [];
+		$.each( cell.childNodes, function( _, el ) {
+			var $el = $( el );
+			if( $el.is( 'input, select' ) ) {
+				nodes.push($el.val());
+			} else if( $el.is( '.tablesaw-cell-label' ) ) {
+				nodes.push(null);
+			} else {
+				nodes.push($.trim( $el.text() ));
+			}
+		});
+		return nodes.join( '' );
 	}
 
 	var topLevelPluginName = "tablesaw-sortable",
