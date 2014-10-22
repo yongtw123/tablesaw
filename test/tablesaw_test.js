@@ -109,7 +109,7 @@
 	test( 'Show Dialog', function() {
 		ok( !isVisible($fixture.find( '.tablesaw-columntoggle-popup' )), 'Dialog hidden' );
 
-		$table.prev().find( '.tablesaw-columntoggle-btn' ).click();
+		$table.prev().find( '.tablesaw-columntoggle-btn' ).trigger( "click" );
 
 		ok( isVisible($fixture.find( '.tablesaw-columntoggle-popup' )), 'Dialog visible after button click' );
 
@@ -117,7 +117,7 @@
 		ok( $curtain.length, 'Curtain visible.' );
 
 		// close dialog
-		$curtain.click();
+		$curtain.trigger( "click" );
 		ok( $curtain.is( '.dialog-background-open' ), 'Curtain not visible after click.' );
 	});
 
@@ -130,7 +130,7 @@
 			.next().find( ':checkbox' ).trigger( 'click' );
 
 		// close dialog
-		$( '.dialog-background-open' ).click();
+		$( '.dialog-background-open' ).trigger("click");
 
 		strictEqual( $cell.is( '.tablesaw-cell-hidden' ), true, 'First cell is hidden after checkbox unchecked' );
 	});
@@ -182,11 +182,11 @@
 		var previousRow1Text = $table.find( 'tbody tr td' ).eq( 0 ).text(),
 			$sortButton = $table.find( '.sortable-head button' ).eq( 0 );
 
-		$sortButton.click();
+		$sortButton.trigger( "click" );
 
 		notEqual( $table.find( 'tbody tr td' ).eq( 0 ).text(), previousRow1Text, 'First row is sorted descending' );
 
-		$sortButton.click();
+		$sortButton.trigger( "click" );
 
 		equal( $table.find( 'tbody tr td' ).eq( 0 ).text(), previousRow1Text, 'First row is sorted ascending' );
 	});
@@ -194,11 +194,11 @@
 	test( 'Can sort numeric descending', function() {
 		var $sortButton = $table.find( '.sortable-head button' ).eq( 1 );
 
-		$sortButton.click();
+		$sortButton.trigger( "click" );
 
 		equal( $table.find( 'tbody tr:eq(0) td:eq(1)' ).html(), '10', 'First row is sorted descending' );
 
-		$sortButton.click();
+		$sortButton.trigger( "click" );
 
 		equal( $table.find( 'tbody tr:eq(0) td:eq(1)' ).html(), '1', 'First row is sorted ascending' );
 	});
@@ -208,10 +208,10 @@
 			$sortButton = $table.find( '.sortable-head button' ).eq( 0 ),
 			rows = $table.find( 'tbody tr' ).length;
 
-		$sortButton.click();
+		$sortButton.trigger( "click" );
 		equal( $table.find( 'tbody tr:eq(' + (rows - 2 ) + ') td:eq(0)' ).text(), previousText, previousText + ' is in row ' + ( rows - 2 ) + ' of ' + rows + ' (descending)' );
 
-		$sortButton.click();
+		$sortButton.trigger( "click" );
 		equal( $table.find( 'tbody tr:eq(1) td:eq(0)' ).text(), previousText, previousText + ' is in the second row (ascending)' );
 
 	});
@@ -220,10 +220,10 @@
 		var previousText = "body row 4",
 			$sortButton = $table.find( '.sortable-head button' ).eq( 0 );
 
-		$sortButton.click();
+		$sortButton.trigger( "click" );
 		equal( $table.find( 'tbody tr:eq(0) td:eq(0)' ).text(), previousText, previousText + ' is in the first row (descending)' );
 
-		$sortButton.click();
+		$sortButton.trigger("click");
 		equal( $table.find( 'tbody tr:eq(4) td:eq(0)' ).text(), previousText, previousText + ' is in the third row (ascending)' );
 
 	});
