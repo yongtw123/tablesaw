@@ -178,7 +178,7 @@
 			}
 		}
 
-		$prevBtn.add( $nextBtn ).click(function( e ){
+		$prevBtn.add( $nextBtn ).bind( "click", function( e ){
 			advance( !!$( e.target ).closest( $nextBtn ).length );
 			e.preventDefault();
 		});
