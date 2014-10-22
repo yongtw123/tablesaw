@@ -127,7 +127,7 @@
 		strictEqual( $cell.is( '.tablesaw-cell-hidden' ), false, 'First cell is visible before checkbox unchecked' );
 
 		$table.prev().find( '.tablesaw-columntoggle-btn' ).trigger( 'click' )
-			.next().find( ':checkbox' ).trigger( 'click' );
+			.next().find( 'input[type=checkbox]' ).trigger( 'click' );
 
 		// close dialog
 		$( '.dialog-background-open' ).trigger("click");
