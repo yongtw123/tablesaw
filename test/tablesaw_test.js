@@ -19,6 +19,12 @@
 			notStrictEqual(actual, expected, [message])
 			throws(block, [expected], [message])
 	*/
+	var isVisible = function(element){
+		if( element.length ){
+			element = element[0];
+		}
+		return element.offsetWidth > 0 || element.offsetHeight > 0;
+	};
 
 	var tableHtml = [
 			'<table %s>',
@@ -97,15 +103,15 @@
 
 	test( 'Initialization', function() {
 		ok( $table.is( '.tablesaw-columntoggle' ), 'Has initialization class.' );
-		ok( $table.find( 'tbody td' ).eq( 0 ).is( ':visible' ), 'First cell is visible' );
+		ok( isVisible( $table.find( 'tbody td' ).eq( 0 ) ), 'First cell is visible' );
 	});
 
 	test( 'Show Dialog', function() {
-		ok( !$fixture.find( '.tablesaw-columntoggle-popup' ).is( ':visible' ), 'Dialog hidden' );
+		ok( !isVisible($fixture.find( '.tablesaw-columntoggle-popup' )), 'Dialog hidden' );
 
 		$table.prev().find( '.tablesaw-columntoggle-btn' ).click();
 
-		ok( $fixture.find( '.tablesaw-columntoggle-popup' ).is( ':visible' ), 'Dialog visible after button click' );
+		ok( isVisible($fixture.find( '.tablesaw-columntoggle-popup' )), 'Dialog visible after button click' );
 
 		var $curtain = $( '.dialog-background-open' );
 		ok( $curtain.length, 'Curtain visible.' );
