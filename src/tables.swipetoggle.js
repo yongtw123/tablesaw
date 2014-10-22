@@ -35,7 +35,7 @@
 		});
 		$table.css( 'width', '' );
 
-		$btns.appendTo( $table.prev( '.tablesaw-bar' ) );
+		$btns.appendTo( $table.prev().filter( '.tablesaw-bar' ) );
 
 		$table.addClass( "tablesaw-swipe" );
 
@@ -225,7 +225,7 @@
 				var $t = $( this );
 
 				$t.removeClass( 'tablesaw-swipe' );
-				$t.prev( '.tablesaw-bar' ).find( '.tablesaw-advance' ).remove();
+				$t.prev().filter( '.tablesaw-bar' ).find( '.tablesaw-advance' ).remove();
 				$( win ).off( "resize", fakeBreakpoints );
 
 				$t.unbind( ".swipetoggle" );
