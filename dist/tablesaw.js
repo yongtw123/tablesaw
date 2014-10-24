@@ -403,10 +403,17 @@
 		// bind change event listeners to inputs - TODO: move to a private method?
 		$menu.find( 'input[type="checkbox"]' ).on( "change", function(e) {
 			var checked = e.target.checked;
+			var cells = $( e.target ).data( "cells" );
 
-			$( e.target ).data( "cells" )
-				.toggleClass( "tablesaw-cell-hidden", !checked )
-				.toggleClass( "tablesaw-cell-visible", checked );
+			if( !!checked ) {
+				cells
+					.addClass( "tablesaw-cell-visible" )
+					.removeClass( "tablesaw-cell-hidden" );
+			} else {
+				cells
+					.removeClass( "tablesaw-cell-visible" )
+					.addClass( "tablesaw-cell-hidden" );
+			}
 
 			self.$table.trigger( 'tablesawcolumns' );
 		});
