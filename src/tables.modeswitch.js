@@ -28,7 +28,7 @@
 				ignoreMode = $table.attr( S.attributes.excludeMode ),
 				$toolbar = $table.prev().filter( '.tablesaw-bar' ),
 				modeVal = '',
-				$switcher = $( '<div>' ).addClass( S.classes.main + ' ' + S.classes.toolbar ).html(function() {
+				generateHTML = function() {
 					var html = [ '<label>' + S.i18n.columns + ':' ],
 						dataMode = $table.attr( 'data-mode' ),
 						isSelected;
@@ -52,7 +52,9 @@
 					html.push( '</select></span></label>' );
 
 					return html.join('');
-				});
+				},
+
+				$switcher = $( '<div>' ).addClass( S.classes.main + ' ' + S.classes.toolbar ).html(generateHTML());
 
 			var $otherToolbarItems = $toolbar.find( '.tablesaw-advance' ).eq( 0 );
 			if( $otherToolbarItems.length ) {

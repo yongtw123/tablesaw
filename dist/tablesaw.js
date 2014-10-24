@@ -1,4 +1,4 @@
-/*! Tablesaw - v0.1.7 - 2014-10-22
+/*! Tablesaw - v0.1.7 - 2014-10-24
 * https://github.com/filamentgroup/tablesaw
 * Copyright (c) 2014 Filament Group; Licensed MIT */
 ;(function( $ ) {
@@ -841,7 +841,7 @@
 						});
 					},
 					addSwitcher = function( heads ){
-						$switcher = $( '<div>' ).addClass( classes.switcher ).addClass( classes.tableToolbar ).html(function() {
+						var generateHTML = function() {
 							var html = [ '<label>' + i18n.sort + ':' ];
 
 							html.push( '<span class="btn btn-small">&#160;<select>' );
@@ -852,7 +852,7 @@
 									isNumeric = false;
 
 								// Check only the first three rows to see if the column is numbers.
-								$( this.cells ).slice( 0, 3 ).each(function() {
+								$($( this.cells ).slice( 0, 3 )).each(function() {
 									if( !isNaN( parseInt( getSortValue( this ), 10 ) ) ) {
 										isNumeric = true;
 										return false;
@@ -865,7 +865,9 @@
 							html.push( '</select></span></label>' );
 
 							return html.join('');
-						});
+						};
+
+						$switcher = $( '<div>' ).addClass( classes.switcher ).addClass( classes.tableToolbar ).html(generateHTML());
 
 						var $toolbar = el.prev().filter( '.tablesaw-bar' ),
 							$firstChild = $toolbar.children().eq( 0 );
@@ -1114,7 +1116,7 @@
 				ignoreMode = $table.attr( S.attributes.excludeMode ),
 				$toolbar = $table.prev().filter( '.tablesaw-bar' ),
 				modeVal = '',
-				$switcher = $( '<div>' ).addClass( S.classes.main + ' ' + S.classes.toolbar ).html(function() {
+				generateHTML = function() {
 					var html = [ '<label>' + S.i18n.columns + ':' ],
 						dataMode = $table.attr( 'data-mode' ),
 						isSelected;
@@ -1138,7 +1140,9 @@
 					html.push( '</select></span></label>' );
 
 					return html.join('');
-				});
+				},
+
+				$switcher = $( '<div>' ).addClass( S.classes.main + ' ' + S.classes.toolbar ).html(generateHTML());
 
 			var $otherToolbarItems = $toolbar.find( '.tablesaw-advance' ).eq( 0 );
 			if( $otherToolbarItems.length ) {

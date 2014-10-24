@@ -112,7 +112,7 @@
 						});
 					},
 					addSwitcher = function( heads ){
-						$switcher = $( '<div>' ).addClass( classes.switcher ).addClass( classes.tableToolbar ).html(function() {
+						var generateHTML = function() {
 							var html = [ '<label>' + i18n.sort + ':' ];
 
 							html.push( '<span class="btn btn-small">&#160;<select>' );
@@ -123,7 +123,7 @@
 									isNumeric = false;
 
 								// Check only the first three rows to see if the column is numbers.
-								$( this.cells ).slice( 0, 3 ).each(function() {
+								$($( this.cells ).slice( 0, 3 )).each(function() {
 									if( !isNaN( parseInt( getSortValue( this ), 10 ) ) ) {
 										isNumeric = true;
 										return false;
@@ -136,7 +136,9 @@
 							html.push( '</select></span></label>' );
 
 							return html.join('');
-						});
+						};
+
+						$switcher = $( '<div>' ).addClass( classes.switcher ).addClass( classes.tableToolbar ).html(generateHTML());
 
 						var $toolbar = el.prev().filter( '.tablesaw-bar' ),
 							$firstChild = $toolbar.children().eq( 0 );
