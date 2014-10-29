@@ -270,12 +270,9 @@
 	// add methods
 	$.extend( $.fn[ pluginName ].prototype, methods );
 
-	$( document ).on( "tablesawcreate", function(e) {
-		if( !(e.target && e.target.tagName==="TABLE") ){
-			return;
-		}
-		if( $( e.target ).is( initSelector ) ) {
-			$( e.target )[ pluginName ]();
+	$( document ).on( "tablesawcreate", function( e, Tablesaw ) {
+		if( Tablesaw.$table.is( initSelector ) ) {
+			Tablesaw.$table[ pluginName ]();
 		}
 	});
 

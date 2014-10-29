@@ -46,7 +46,9 @@
 
 		// create the hide/show toggles
 		reverseHeaders.each(function(){
-			var $cells = $( this.cells ),
+			var $cells = $( this.cells ).filter(function() {
+					return !$( this ).parent().is( "[" + attrs.labelless + "]" );
+				}),
 				hierarchyClass = $cells.not( this ).filter( "thead th" ).length && " tablesaw-cell-label-top",
 				text = $(this).text();
 
@@ -72,23 +74,18 @@
 	};
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", function( e, mode, colstart ){
-		if( !(e.target && e.target.tagName==="TABLE") ){
-			return;
-		}
-		if( mode === 'stack' ){
-			var table = new Stack( e.target );
+	$( document ).on( "tablesawcreate", function( e, Tablesaw, colstart ){
+		if( Tablesaw.mode === 'stack' ){
+			var table = new Stack( Tablesaw.table );
 			table.init( colstart );
 		}
 
 	} );
 
-	$( document ).on( "tablesawdestroy", function( e, mode ){
-		if( !(e.target && e.target.tagName==="TABLE") ){
-			return;
-		}
-		if( mode === 'stack' ){
-			$( e.target ).data( data.obj ).destroy();
+	$( document ).on( "tablesawdestroy", function( e, Tablesaw ){
+
+		if( Tablesaw.mode === 'stack' ){
+			$( Tablesaw.table ).data( data.obj ).destroy();
 		}
 
 	} );

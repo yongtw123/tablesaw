@@ -80,12 +80,9 @@
 		}
 	};
 
-	$( win.document ).on( "tablesawcreate", function(e) {
-		if( !(e.target && e.target.tagName==="TABLE") ){
-			return;
-		}
-		if( $( e.target ).is( S.selectors.init ) ) {
-			S.init( e.target );
+	$( win.document ).on( "tablesawcreate", function( e, Tablesaw ) {
+		if( Tablesaw.$table.is( S.selectors.init ) ) {
+			S.init( Tablesaw.table );
 		}
 	});
 

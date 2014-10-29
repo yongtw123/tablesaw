@@ -74,14 +74,10 @@
 
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", function( e, mode ){
-		if( !(e.target && e.target.tagName==="TABLE") ){
-			return;
-		}
+	$( document ).on( "tablesawcreate", function( e, Tablesaw ){
 
-		var $table = $( e.target );
-		if( ( mode === 'swipe' || mode === 'columntoggle' ) && $table.is( '[ ' + MM.attr.init + ']' ) ){
-			createMiniMap( $table );
+		if( ( Tablesaw.mode === 'swipe' || Tablesaw.mode === 'columntoggle' ) && Tablesaw.$table.is( '[ ' + MM.attr.init + ']' ) ){
+			createMiniMap( Tablesaw.$table );
 		}
 
 	} );

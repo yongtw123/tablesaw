@@ -13,6 +13,16 @@ module.exports = function(grunt) {
 			' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
 		// Task configuration.
 		clean: ['dist/tmp/'],
+		copy: {
+			jquery: {
+				src: 'bower_components/jquery/dist/jquery.js',
+				dest: 'dist/dependencies/jquery.js'
+			},
+			respond: {
+				src: 'bower_components/respond/dest/respond.src.js',
+				dest: 'dist/dependencies/respond.js'
+			}
+		},
 		concat: {
 			options: {
 				banner: '<%= banner %>',
@@ -39,7 +49,7 @@ module.exports = function(grunt) {
 					'src/tables.js',
 					'src/tables.stack.js'
 				],
-				dest: 'dist/<%= pkg.name %>.stackonly.js'
+				dest: 'dist/stackonly/<%= pkg.name %>.stackonly.js'
 			},
 			cssall: {
 				src: [
@@ -76,7 +86,7 @@ module.exports = function(grunt) {
 					'dist/tmp/<%= pkg.name %>.stackonly-sans-mixin.scss',
 					'src/tables.stack-mixin.scss'
 				],
-				dest: 'dist/<%= pkg.name %>.stackonly.scss'
+				dest: 'dist/stackonly/<%= pkg.name %>.stackonly.scss'
 			}
 		},
 		qunit: {
@@ -111,34 +121,10 @@ module.exports = function(grunt) {
 				files: ['<%= concat.cssall.src %>', '<%= concat.jsall.src %>'],
 				tasks: ['src']
 			},
-			icons: {
-				files: ['<%= grunticon.tablesaw.options.src %>/*'],
-				tasks: ['grunticon:tablesaw']
-			},
 			test: {
 				files: '<%= jshint.test.src %>',
 				tasks: ['jshint:test', 'qunit']
 			},
-		},
-		grunticon: {
-			tablesaw: {
-				files: [{
-					expand: true,
-					cwd: 'src/icons/',
-					src: ['*.svg'],
-					dest: 'dist/icons/'
-				}],
-				options: {
-					loadersnippet: 'grunticon.loader.js',
-					customselectors: {
-						"arrow-gray-down": [".tablesaw-bar .tablesaw-columntoggle-btnwrap > a.btn"],
-						"sort-ascending": [".tablesaw-sortable .sortable-head.sortable-ascending button:after"],
-						"sort-descending": [".tablesaw-sortable .sortable-head.sortable-descending button:after"],
-						"arrow-gray-right": [".tablesaw-bar .tablesaw-advance > .btn.right"],
-						"arrow-gray-left": [".tablesaw-bar .tablesaw-advance > .btn.left"]
-					}
-				}
-			}
 		},
 		bytesize: {
 			dist: {
@@ -149,8 +135,8 @@ module.exports = function(grunt) {
 			},
 			stackonly: {
 				src: [
-					'dist/<%= pkg.name %>.stackonly.css',
-					'dist/<%= pkg.name %>.stackonly.js'
+					'dist/stackonly/<%= pkg.name %>.stackonly.css',
+					'dist/stackonly/<%= pkg.name %>.stackonly.js'
 				]
 			}
 		},
@@ -162,9 +148,23 @@ module.exports = function(grunt) {
 			dist: {
 				files: {
 					'dist/<%= pkg.name %>.css': '<%= concat.cssall.dest %>',
-					'dist/<%= pkg.name %>.stackonly.css': '<%= concat.cssstack.dest %>',
+					'dist/stackonly/<%= pkg.name %>.stackonly.css': '<%= concat.cssstack.dest %>',
 					'dist/tmp/<%= pkg.name %>.stackonly-sans-mixin.scss': '<%= concat.cssstackmixinpre.dest %>'
 				}
+			}
+		},
+		compress: {
+			main: {
+				options: {
+					archive: 'dist/tablesaw-<%= pkg.version %>.zip',
+					mode: 'zip',
+					pretty: true
+				},
+				files: [
+					{expand: true, cwd: 'dist/', src: ['*'], dest: 'tablesaw/'},
+					{expand: true, cwd: 'dist/', src: ['dependencies/*'], dest: 'tablesaw/'},
+					{expand: true, cwd: 'dist/', src: ['stackonly/*'], dest: 'tablesaw/'}
+				]
 			}
 		}
 	});
@@ -175,9 +175,9 @@ module.exports = function(grunt) {
 	grunt.registerTask('travis', ['jshint', 'qunit']);
 	grunt.registerTask('concat-pre', ['concat:jsall', 'concat:jsstack', 'concat:cssall', 'concat:cssstack', 'concat:cssstackmixinpre']);
 	grunt.registerTask('concat-post', ['concat:cssstackmixinpost']);
-	grunt.registerTask('src', ['concat-pre', 'myth', 'concat-post', 'clean']);
+	grunt.registerTask('src', ['concat-pre', 'myth', 'concat-post', 'copy', 'clean']);
 
-	grunt.registerTask('default', ['jshint', 'src', 'grunticon:tablesaw', 'qunit', 'bytesize']);
+	grunt.registerTask('default', ['jshint', 'src', 'qunit', 'bytesize']);
 
 	// Deploy
 	grunt.registerTask('deploy', ['default', 'gh-pages']);

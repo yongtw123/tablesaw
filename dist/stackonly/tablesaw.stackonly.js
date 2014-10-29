@@ -1,4 +1,4 @@
-/*! Tablesaw - v0.1.7 - 2014-10-24
+/*! Tablesaw - v0.1.8 - 2014-10-29
 * https://github.com/filamentgroup/tablesaw
 * Copyright (c) 2014 Filament Group; Licensed MIT */
 ;(function( $ ) {
@@ -12,7 +12,9 @@
 	}
 
 	// Cut the mustard
-	if( !( 'querySelector' in document ) || ( window.blackberry && !window.WebKitPoint ) || window.operamini ) {
+	if( !( 'querySelector' in document ) ||
+			( window.blackberry && !window.WebKitPoint ) ||
+			window.operamini ) {
 		return;
 	} else {
 		$doc.addClass( 'tablesaw-enhanced' );
@@ -61,7 +63,7 @@
 
 		var colstart = this._initCells();
 
-		this.$table.trigger( events.create, [ this.mode, colstart ] );
+		this.$table.trigger( events.create, [ this, colstart ] );
 	};
 
 	Table.prototype._initCells = function() {
@@ -122,10 +124,12 @@
 			this.className = this.className.replace( /\bmode\-\w*\b/gi, '' );
 		});
 
-		$( window ).off( 'resize.' + this.$table.attr( 'id' ) );
+		var tableId = this.$table.attr( 'id' );
+		$( document ).unbind( "." + tableId );
+		$( window ).unbind( "." + tableId );
 
 		// other plugins
-		this.$table.trigger( events.destroy, [ this.mode ] );
+		this.$table.trigger( events.destroy, [ this ] );
 
 		this.$table.removeAttr( 'data-mode' );
 
@@ -193,7 +197,9 @@
 
 		// create the hide/show toggles
 		reverseHeaders.each(function(){
-			var $cells = $( this.cells ),
+			var $cells = $( this.cells ).filter(function() {
+					return !$( this ).parent().is( "[" + attrs.labelless + "]" );
+				}),
 				hierarchyClass = $cells.not( this ).filter( "thead th" ).length && " tablesaw-cell-label-top",
 				text = $(this).text();
 
@@ -219,23 +225,18 @@
 	};
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", function( e, mode, colstart ){
-		if( !(e.target && e.target.tagName==="TABLE") ){
-			return;
-		}
-		if( mode === 'stack' ){
-			var table = new Stack( e.target );
+	$( document ).on( "tablesawcreate", function( e, Tablesaw, colstart ){
+		if( Tablesaw.mode === 'stack' ){
+			var table = new Stack( Tablesaw.table );
 			table.init( colstart );
 		}
 
 	} );
 
-	$( document ).on( "tablesawdestroy", function( e, mode ){
-		if( !(e.target && e.target.tagName==="TABLE") ){
-			return;
-		}
-		if( mode === 'stack' ){
-			$( e.target ).data( data.obj ).destroy();
+	$( document ).on( "tablesawdestroy", function( e, Tablesaw ){
+
+		if( Tablesaw.mode === 'stack' ){
+			$( Tablesaw.table ).data( data.obj ).destroy();
 		}
 
 	} );
