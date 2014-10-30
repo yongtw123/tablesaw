@@ -113,12 +113,6 @@
 
 		ok( isVisible($fixture.find( '.tablesaw-columntoggle-popup' )), 'Dialog visible after button click' );
 
-		var $curtain = $( '.dialog-background-open' );
-		ok( $curtain.length, 'Curtain visible.' );
-
-		// close dialog
-		$curtain.trigger( "click" );
-		ok( $curtain.is( '.dialog-background-open' ), 'Curtain not visible after click.' );
 	});
 
 	test( 'Toggle Column', function() {
@@ -130,7 +124,7 @@
 			.next().find( 'input[type=checkbox]' ).trigger( 'click' );
 
 		// close dialog
-		$( '.dialog-background-open' ).trigger("click");
+		$( '.tablesaw-columntoggle-popup .close' ).trigger("click");
 
 		strictEqual( $cell.is( '.tablesaw-cell-hidden' ), true, 'First cell is hidden after checkbox unchecked' );
 	});

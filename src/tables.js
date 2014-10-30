@@ -41,7 +41,7 @@
 
 		var colstart = this._initCells();
 
-		this.$table.trigger( events.create, [ this.mode, colstart ] );
+		this.$table.trigger( events.create, [ this, colstart ] );
 	};
 
 	Table.prototype._initCells = function() {
@@ -102,10 +102,12 @@
 			this.className = this.className.replace( /\bmode\-\w*\b/gi, '' );
 		});
 
-		$( window ).off( 'resize.' + this.$table.attr( 'id' ) );
+		var tableId = this.$table.attr( 'id' );
+		$( document ).unbind( "." + tableId );
+		$( window ).unbind( "." + tableId );
 
 		// other plugins
-		this.$table.trigger( events.destroy, [ this.mode ] );
+		this.$table.trigger( events.destroy, [ this ] );
 
 		this.$table.removeAttr( 'data-mode' );
 

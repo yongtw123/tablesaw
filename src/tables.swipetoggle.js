@@ -23,6 +23,10 @@
 			// TODO switch this to an nth-child feature test
 			isIE8 = $( 'html' ).is( '.ie-lte8' );
 
+		if( !$headerCells.length ) {
+			throw new Error( "tablesaw swipe: no header cells found. Are you using <th> inside of <thead>?" );
+		}
+
 		// Calculate initial widths
 		$table.css('width', 'auto');
 		$headerCells.each(function() {
@@ -238,14 +242,10 @@
 
 
 	// on tablecreate, init
-	$( document ).on( "tablesawcreate", function( e, mode ){
-		if( !(e.target && e.target.tagName==="TABLE") ){
-			return;
-		}
+	$( document ).on( "tablesawcreate", function( e, Tablesaw ){
 
-		var $table = $( e.target );
-		if( mode === 'swipe' ){
-			createSwipeTable( $table );
+		if( Tablesaw.mode === 'swipe' ){
+			createSwipeTable( Tablesaw.$table );
 		}
 
 	} );
