@@ -1,17 +1,14 @@
 /*
  Styles for the table columntoggle mode
 */
-
-/* see Gruntfile.js for grunticon selector */
-.btn.tablesaw-columntoggle-btn {
-	float: right;
-}
-
 .btn.tablesaw-columntoggle-btn span {
 	text-indent: -9999px;
 	display: inline-block;
 }
 
+.tablesaw-columntoggle-btnwrap {
+	position: relative; /* for dialog positioning */
+}
 .tablesaw-columntoggle-btnwrap .dialog-content {
 	padding: .5em;
 }
@@ -58,10 +55,6 @@
 	}
 }
 
-.tablesaw-columntoggle-btnwrap {
-	position: relative;
-	float: right;
-}
 .tablesaw-columntoggle-btnwrap .dialog-content {
 	top: 0 !important;
 	right: 1em;
@@ -124,13 +117,6 @@
 }
 
 @media only all {
-	.tablesaw-swipe .tablesaw-cell-persist {
-		border-right: 1px solid #e4e1de;
-	}
-	.tablesaw-swipe .tablesaw-cell-persist {
-		box-shadow: 3px 0 4px -1px #e4e1de;
-	}
-
 	/* Unchecked manually: Always hide */
 	.tablesaw-swipe th.tablesaw-cell-hidden,
 	.tablesaw-swipe td.tablesaw-cell-hidden,

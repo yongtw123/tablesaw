@@ -21,16 +21,19 @@
 		return nodes.join( '' );
 	}
 
-	var topLevelPluginName = "tablesaw-sortable",
-		pluginName = "sortable",
+	var pluginName = "tablesaw-sortable",
 		initSelector = "table[data-" + pluginName + "]",
 		sortableSwitchSelector = "[data-" + pluginName + "-switch]",
+		attrs = {
+			defaultCol: "data-tablesaw-sortable-default-col"
+		},
 		classes = {
 			head: pluginName + "-head",
 			ascend: pluginName + "-ascending",
 			descend: pluginName + "-descending",
-			switcher: topLevelPluginName + "-switch",
-			tableToolbar: 'tablesaw-toolbar'
+			switcher: pluginName + "-switch",
+			tableToolbar: 'tablesaw-toolbar',
+			sortButton: pluginName + "-btn"
 		},
 		i18n = {
 			sort: 'Sort'
@@ -55,7 +58,7 @@
 					$switcher;
 
 				var addClassToTable = function(){
-						el.addClass( topLevelPluginName );
+						el.addClass( pluginName );
 					},
 					addClassToHeads = function( h ){
 						$.each( h , function( i , v ){
@@ -64,7 +67,7 @@
 					},
 					makeHeadsActionable = function( h , fn ){
 						$.each( h , function( i , v ){
-							var b = $( "<button />" );
+							var b = $( "<button class='" + classes.sortButton + "'/>" );
 							b.bind( "click" , { col: v } , fn );
 							$( v ).wrapInner( b );
 						});
@@ -72,7 +75,7 @@
 					clearOthers = function( sibs ){
 						$.each( sibs , function( i , v ){
 							var col = $( v );
-							col.removeAttr( "data-sortable-default-col" );
+							col.removeAttr( attrs.defaultCol );
 							col.removeClass( classes.ascend );
 							col.removeClass( classes.descend );
 						});
@@ -104,7 +107,7 @@
 					handleDefault = function( heads ){
 						$.each( heads , function( idx , el ){
 							var $el = $( el );
-							if( $el.is( "[data-sortable-default-col]" ) ){
+							if( $el.is( "[" + attrs.defaultCol + "]" ) ){
 								if( !$el.is( "." + classes.descend ) ) {
 									$el.addClass( classes.ascend );
 								}
@@ -118,7 +121,7 @@
 							html.push( '<span class="btn btn-small">&#160;<select>' );
 							heads.each(function( j ) {
 								var $t = $( this ),
-									isDefaultCol = $t.is( '[data-sortable-default-col]' ),
+									isDefaultCol = $t.is( "[" + attrs.defaultCol + "]" ),
 									isDescending = $t.is( "." + classes.descend ),
 									isNumeric = false;
 
@@ -154,7 +157,7 @@
 								head = heads.eq( val[ 0 ] );
 
 							clearOthers( head.siblings() );
-							el.sortable( 'sortBy', head.get( 0 ), val[ 1 ] === 'asc' );
+							el[ pluginName ]( 'sortBy', head.get( 0 ), val[ 1 ] === 'asc' );
 						});
 					};
 
@@ -188,7 +191,7 @@
 					},
 					getSortFxn = function( ascending, forceNumeric ){
 						var fn,
-							regex = /[^\d\.]/g;
+							regex = /[^\-\+\d\.]/g;
 						if( ascending ){
 							fn = function( a , b ){
 								if( forceNumeric || !isNaN( parseFloat( a.cell ) ) ) {
@@ -230,7 +233,7 @@
 			},
 			makeColDefault: function( col , a ){
 				var c = $( col );
-				c.attr( "data-sortable-default-col" , "true" );
+				c.attr( attrs.defaultCol , "true" );
 				if( a ){
 					c.removeClass( classes.descend );
 					c.addClass( classes.ascend );

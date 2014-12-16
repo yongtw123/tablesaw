@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>TableSaw Column Toggle Table</title>
 
-	<link rel="stylesheet" href="../dist/tablesaw.css">
+	<link rel="stylesheet" href="../dist/bare/tablesaw.bare.css">
 	<link rel="stylesheet" href="demo.css">
 	<link rel="stylesheet" href="/demo-head/demohead.css">
 
@@ -39,108 +39,111 @@
 			<a href="stack.html">Stack</a>
 			<a href="stackonly.html">Stack Only</a>
 			<a href="swipe.html">Swipe Table</a>
-			<a href="toggle.html" class="current">Toggle</a>
-			<a href="bare.html">Bare</a>
+			<a href="toggle.html">Toggle</a>
+			<a href="bare.html" class="current">Bare</a>
 			</nav>
 		</div>
 	</div>
 	<div class="docs-main">
-
-		<h2>Column Toggle Table</h2>
-		<p>The Column Toggle Table allows the user to select which columns they want to be visible.</p>
-		<table class="tablesaw" data-tablesaw-mode="columntoggle">
+		<h3 class="docs">Swipe Mode, ModeSwitch, Minimap, Sortable, SortableSwitch</h3>
+		<table id="table2" class="tablesaw" data-tablesaw-mode="swipe" data-tablesaw-sortable data-tablesaw-sortable-switch data-tablesaw-minimap data-tablesaw-mode-switch>
 			<thead>
 				<tr>
-					<th scope="col" data-tablesaw-priority="3">Rank</th>
-					<th scope="col" data-tablesaw-priority="persist">Movie Title</th>
-					<th scope="col" data-tablesaw-priority="2">Year</th>
-					<th scope="col" data-tablesaw-priority="1"><abbr title="Rotten Tomato Rating">Rating</abbr></th>
-					<th scope="col" data-tablesaw-priority="4">Reviews</th>
+					<th scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col data-tablesaw-priority="persist">Movie Title</th>
+					<th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="3">Rank</th>
+					<th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="2">Year</th>
+					<th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1"><abbr title="Rotten Tomato Rating">Rating</abbr></th>
+					<th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="4">Reviews</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>1</td>
 					<td><a href="http://en.wikipedia.org/wiki/Citizen_Kane" data-rel="external">Citizen Kane</a></td>
+					<td class="har">1</td>
 					<td>1941</td>
 					<td>100%</td>
 					<td>74</td>
 				</tr>
 				<tr>
-					<td>2</td>
 					<td><a href="http://en.wikipedia.org/wiki/Casablanca_(film)" data-rel="external">Casablanca</a></td>
+					<td>2</td>
 					<td>1942</td>
 					<td>97%</td>
 					<td>64</td>
 				</tr>
 				<tr>
-					<td>3</td>
 					<td><a href="http://en.wikipedia.org/wiki/The_Godfather" data-rel="external">The Godfather</a></td>
+					<td>3</td>
 					<td>1972</td>
 					<td>97%</td>
 					<td>87</td>
 				</tr>
 				<tr>
-					<td>4</td>
 					<td><a href="http://en.wikipedia.org/wiki/Gone_with_the_Wind_(film)" data-rel="external">Gone with the Wind</a></td>
+					<td>4</td>
 					<td>1939</td>
 					<td>96%</td>
 					<td>87</td>
 				</tr>
 				<tr>
-					<td>5</td>
 					<td><a href="http://en.wikipedia.org/wiki/Lawrence_of_Arabia_(film)" data-rel="external">Lawrence of Arabia</a></td>
+					<td>5</td>
 					<td>1962</td>
 					<td>94%</td>
 					<td>87</td>
 				</tr>
-			</tbody>
-		</table>
-
-		<h2>Column Toggle Table with Mini Map</h2>
-
-		<table class="tablesaw" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
-			<thead>
 				<tr>
-					<th scope="col" data-tablesaw-priority="3">Rank</th>
-					<th scope="col" data-tablesaw-priority="persist">Movie Title</th>
-					<th scope="col" data-tablesaw-priority="2">Year</th>
-					<th scope="col" data-tablesaw-priority="1"><abbr title="Rotten Tomato Rating">Rating</abbr></th>
-					<th scope="col" data-tablesaw-priority="4">Reviews</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>1</td>
-					<td><a href="http://en.wikipedia.org/wiki/Citizen_Kane" data-rel="external">Citizen Kane</a></td>
-					<td>1941</td>
-					<td>100%</td>
-					<td>74</td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td><a href="http://en.wikipedia.org/wiki/Casablanca_(film)" data-rel="external">Casablanca</a></td>
-					<td>1942</td>
-					<td>97%</td>
-					<td>64</td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td><a href="http://en.wikipedia.org/wiki/The_Godfather" data-rel="external">The Godfather</a></td>
-					<td>1972</td>
-					<td>97%</td>
-					<td>87</td>
-				</tr>
-				<tr>
-					<td>4</td>
-					<td><a href="http://en.wikipedia.org/wiki/Gone_with_the_Wind_(film)" data-rel="external">Gone with the Wind</a></td>
-					<td>1939</td>
-					<td>96%</td>
-					<td>87</td>
-				</tr>
-				<tr>
-					<td>5</td>
 					<td><a href="http://en.wikipedia.org/wiki/Lawrence_of_Arabia_(film)" data-rel="external">Lawrence of Arabia</a></td>
+					<td>5</td>
+					<td>1962</td>
+					<td>94%</td>
+					<td>87</td>
+				</tr>
+				<tr>
+					<td><a href="http://en.wikipedia.org/wiki/Lawrence_of_Arabia_(film)" data-rel="external">Lawrence of Arabia</a></td>
+					<td>5</td>
+					<td>1962</td>
+					<td>94%</td>
+					<td>87</td>
+				</tr>
+				<tr>
+					<td><a href="http://en.wikipedia.org/wiki/Lawrence_of_Arabia_(film)" data-rel="external">Lawrence of Arabia</a></td>
+					<td>5</td>
+					<td>1962</td>
+					<td>94%</td>
+					<td>87</td>
+				</tr>
+				<tr>
+					<td><a href="http://en.wikipedia.org/wiki/Lawrence_of_Arabia_(film)" data-rel="external">Lawrence of Arabia</a></td>
+					<td>5</td>
+					<td>1962</td>
+					<td>94%</td>
+					<td>87</td>
+				</tr>
+				<tr>
+					<td><a href="http://en.wikipedia.org/wiki/Lawrence_of_Arabia_(film)" data-rel="external">Lawrence of Arabia</a></td>
+					<td>5</td>
+					<td>1962</td>
+					<td>94%</td>
+					<td>87</td>
+				</tr>
+				<tr>
+					<td><a href="http://en.wikipedia.org/wiki/Lawrence_of_Arabia_(film)" data-rel="external">Lawrence of Arabia</a></td>
+					<td>5</td>
+					<td>1962</td>
+					<td>94%</td>
+					<td>87</td>
+				</tr>
+				<tr>
+					<td><a href="http://en.wikipedia.org/wiki/Lawrence_of_Arabia_(film)" data-rel="external">Lawrence of Arabia</a></td>
+					<td>5</td>
+					<td>1962</td>
+					<td>94%</td>
+					<td>87</td>
+				</tr>
+				<tr>
+					<td><a href="http://en.wikipedia.org/wiki/Lawrence_of_Arabia_(film)" data-rel="external">Lawrence of Arabia</a></td>
+					<td>5</td>
 					<td>1962</td>
 					<td>94%</td>
 					<td>87</td>

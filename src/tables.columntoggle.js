@@ -15,7 +15,6 @@
 			columnToggleTable: 'tablesaw-columntoggle',
 			columnBtnContain: 'tablesaw-columntoggle-btnwrap tablesaw-advance',
 			columnBtn: 'tablesaw-columntoggle-btn tablesaw-nav-btn down',
-			columnBtnSide: this.$table.attr( 'data-column-btn-side' ) || 'right',
 			popup: 'tablesaw-columntoggle-popup',
 			priorityPrefix: 'tablesaw-priority-',
 			// TODO duplicate class, also in tables.js
@@ -49,7 +48,7 @@
 
 		tableId = this.$table.attr( "id" );
 		id = tableId + "-popup";
-		$btnContain = $( "<div class='" + this.classes.columnBtnContain + " " + this.classes.columnBtnSide + "'></div>" );
+		$btnContain = $( "<div class='" + this.classes.columnBtnContain + "'></div>" );
 		$menuButton = $( "<a href='#" + id + "' class='btn btn-micro " + this.classes.columnBtn +"' data-popup-link>" +
 										"<span>" + this.i18n.columnBtnText + "</span></a>" );
 		$popup = $( "<div class='dialog-table-coltoggle " + this.classes.popup + "' id='" + id + "'></div>" );
@@ -58,7 +57,7 @@
 		var hasNonPersistentHeaders = false;
 		$( this.headers ).not( "td" ).each( function() {
 			var $this = $( this ),
-				priority = $this.attr("data-priority"),
+				priority = $this.attr("data-tablesaw-priority"),
 				$cells = $this.add( this.cells );
 
 			if( priority && priority !== "persist" ) {
@@ -157,16 +156,11 @@
 		var self = this;
 		$(this.headers).not( "td" ).each( function() {
 			var $this = $( this ),
-				priority = $this.attr("data-priority"),
+				priority = $this.attr("data-tablesaw-priority"),
 				$cells = $this.add( this.cells );
 
 			if( priority && priority !== "persist" ) {
 				$cells.addClass( self.classes.priorityPrefix + priority );
-			} else {
-				$cells.each(function() {
-					// remove all priority classes.
-					this.className = this.className.replace( /\bui\-table\-priority\-\d\b/g, '' );
-				});
 			}
 		});
 	};

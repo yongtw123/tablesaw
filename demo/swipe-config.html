@@ -13,6 +13,14 @@
 	<!--[if lt IE 9]><script src="../dist/dependencies/respond.js"></script><![endif]-->
 	<script src="../dist/dependencies/jquery.js"></script>
 	<script src="../dist/tablesaw.js"></script>
+	<script>
+	Tablesaw.config = {
+		swipe: {
+			horizontalThreshold: 15, // default is 15
+			verticalThreshold: 30 // default is 20
+		}
+	};
+	</script>
 	<script src="/demo-head/loadfont.js"></script>
 </head>
 <body>
@@ -47,7 +55,7 @@
 	<div class="docs-main">
 		<h2>Swipe Table</h2>
 
-		<table class="tablesaw" data-tablesaw-mode="swipe">
+		<table class="tablesaw" data-tablesaw-mode="swipe" data-minimap>
 			<thead>
 				<tr>
 					<th scope="col" data-tablesaw-priority="persist">Name</th>
@@ -107,155 +115,6 @@
 					<td>2</td>
 					<td>5</td>
 					<td>89</td>
-					<td>5</td>
-					<td>4</td>
-					<td>3</td>
-				</tr>
-				<tr>
-					<td class="ranked-name">
-						<a href="#">
-							Kenny
-						</a>
-					</td>
-					<td>4</td>
-					<td>34.65</td>
-					<td>27.15</td>
-					<td>4</td>
-					<td>4</td>
-					<td>98</td>
-					<td>5</td>
-					<td>4</td>
-					<td>3</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<h3>Swipe Table with Mini Map</h3>
-
-		<table class="tablesaw" data-tablesaw-mode="swipe" data-tablesaw-minimap>
-			<thead>
-				<tr>
-					<th scope="col" data-tablesaw-priority="persist">Name</th>
-					<th scope="col">Rank</th>
-					<th scope="col">Money</th>
-					<th scope="col">Money</th>
-					<th scope="col">A (1&ndash;5)</th>
-					<th scope="col">B (1&ndash;5)</th>
-					<th scope="col">C (%)</th>
-					<th scope="col">D (1&ndash;5)</th>
-					<th scope="col">E (1&ndash;5)</th>
-					<th scope="col">F (1&ndash;5)</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td class="ranked-name">
-						<a href="#">
-							Amanda
-						</a>
-					</td>
-					<td class="current-ranking">1</td>
-					<td>19.45</td>
-					<td>18.72</td>
-					<td>5</td>
-					<td>5</td>
-					<td>98</td>
-					<td>5</td>
-					<td>4</td>
-					<td>3</td>
-				</tr>
-				<tr>
-					<td class="ranked-name">
-						<a href="#">
-							Dave
-						</a>
-					</td>
-					<td>2</td>
-					<td>36.32</td>
-					<td>20.52</td>
-					<td>4</td>
-					<td>3</td>
-					<td>87</td>
-					<td>5</td>
-					<td>4</td>
-					<td>3</td>
-				</tr>
-				<tr>
-					<td class="ranked-name">
-						<a href="#">
-							Kristen
-						</a>
-					</td>
-					<td>3</td>
-					<td>35.23</td>
-					<td>21.36</td>
-					<td>2</td>
-					<td>5</td>
-					<td>89</td>
-					<td>5</td>
-					<td>4</td>
-					<td>3</td>
-				</tr>
-				<tr>
-					<td class="ranked-name">
-						<a href="#">
-							Kenny
-						</a>
-					</td>
-					<td>4</td>
-					<td>34.65</td>
-					<td>27.15</td>
-					<td>4</td>
-					<td>4</td>
-					<td>98</td>
-					<td>5</td>
-					<td>4</td>
-					<td>3</td>
-				</tr>
-				<tr>
-					<td class="ranked-name">
-						<a href="#">
-							Kenny
-						</a>
-					</td>
-					<td>4</td>
-					<td>34.65</td>
-					<td>27.15</td>
-					<td>4</td>
-					<td>4</td>
-					<td>98</td>
-					<td>5</td>
-					<td>4</td>
-					<td>3</td>
-				</tr>
-				<tr>
-					<td class="ranked-name">
-						<a href="#">
-							Kenny
-						</a>
-					</td>
-					<td>4</td>
-					<td>34.65</td>
-					<td>27.15</td>
-					<td>4</td>
-					<td>4</td>
-					<td>98</td>
-					<td>5</td>
-					<td>4</td>
-					<td>3</td>
-				</tr>
-				<tr>
-					<td class="ranked-name">
-						<a href="#">
-							Kenny
-						</a>
-					</td>
-					<td>4</td>
-					<td>34.65</td>
-					<td>27.15</td>
-					<td>4</td>
-					<td>4</td>
-					<td>98</td>
 					<td>5</td>
 					<td>4</td>
 					<td>3</td>
