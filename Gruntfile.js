@@ -14,7 +14,8 @@ module.exports = function(grunt) {
 		// Task configuration.
 		clean: {
 			dependencies: ['dist/dependencies/'],
-			post: ['dist/tmp/', 'dist/**/*.min.*']
+			//post: ['dist/tmp/', 'dist/**/*.min.*']
+			post: ['dist/tmp/']
 		},
 		copy: {
 			jquery: {
