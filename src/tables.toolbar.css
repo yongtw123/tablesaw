@@ -270,7 +270,9 @@
 	min-width: 0;
 }
 .tablesaw-bar .tablesaw-toolbar .btn-select:after {
-	padding-top: .9em;
+	/* padding-top: .9em;*/
+	padding-top: 5px;
+	font-size: 10px;
 }
 .tablesaw-bar .tablesaw-toolbar select {
 	color: #888;

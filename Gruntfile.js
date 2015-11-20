@@ -45,61 +45,72 @@ module.exports = function(grunt) {
 				src: ['src/tables-init.js'],
 				dest: 'dist/<%= pkg.name %>-init.js'
 			},
-			jsall: {
-				src: [
-					'src/tables.js',
-					'src/tables.stack.js',
-					'src/tables.btnmarkup.js',
-					'src/tables.columntoggle.js',
-					'src/tables.swipetoggle.js',
-					'src/tables.sortable.js',
-					'src/tables.minimap.js',
-					'src/tables.modeswitch.js'
-				],
-				dest: 'dist/<%= pkg.name %>.js'
+			all: {
+				files: {
+					//js
+					'dist/<%= pkg.name %>.js': [
+						'src/tables.js',
+						'src/tables.stack.js',
+						'src/tables.btnmarkup.js',
+						'src/tables.columntoggle.js',
+						'src/tables.swipetoggle.js',
+						'src/tables.sortable.js',
+						'src/tables.minimap.js',
+						'src/tables.modeswitch.js'
+					],
+					//css
+					'dist/tmp/<%= pkg.name %>.myth.css': [
+						'src/tables.css',
+						'src/tables.toolbar.css',
+						'src/tables.skin.css',
+						'src/tables.stack.css',
+						'src/tables.stack-default-breakpoint.css',
+						'src/tables.swipetoggle.css',
+						'src/tables.columntoggle.css',
+						'src/tables.sortable.css',
+						'src/tables.minimap.css',
+						'src/tables.modeswitch.css'
+					]
+				}
 			},
-			jsstack: {
-				src: [
-					'src/tables.js',
-					'src/tables.stack.js'
-				],
-				dest: 'dist/stackonly/<%= pkg.name %>.stackonly.js'
+			stack: {
+				files: {
+					//js
+					'dist/stackonly/<%= pkg.name %>.stackonly.js': [
+						'src/tables.js',
+						'src/tables.stack.js'
+					],
+					//css
+					'dist/tmp/<%= pkg.name %>.stackonly.myth.css': [
+						'src/tables.css',
+						'src/tables.stack.css',
+						'src/tables.stack-default-breakpoint.css'
+					]
+				}
 			},
-			cssall: {
-				src: [
-					'src/tables.css',
-					'src/tables.toolbar.css',
-					'src/tables.skin.css',
-					'src/tables.stack.css',
-					'src/tables.stack-default-breakpoint.css',
-					'src/tables.swipetoggle.css',
-					'src/tables.columntoggle.css',
-					'src/tables.sortable.css',
-					'src/tables.minimap.css'
-				],
-				dest: 'dist/tmp/<%= pkg.name %>.myth.css'
+			custom: {
+				files: {
+					//js
+					'dist/custom/<%= pkg.name %>.js': [
+						'src/tables.js',
+						'src/tables.btnmarkup.js',
+						'src/tables.columntoggle.js',
+						'src/tables.sortable.js',
+						'src/tables-init.js'
+					],
+					//css
+					'dist/tmp/<%= pkg.name %>.custom.myth.css': [
+						'src/tables.css',
+						'src/tables.toolbar.css',
+						'src/tables.columntoggle.css',
+						'src/tables.sortable.css',
+						'src/tables.minimap.css'
+					]
+				}
 			},
 			cssbare: {
-				src: [
-					'src/tables.css',
-					'src/tables.toolbar.css',
-					'src/tables.stack.css',
-					'src/tables.stack-default-breakpoint.css',
-					'src/tables.swipetoggle.css',
-					'src/tables.columntoggle.css',
-					'src/tables.sortable.css',
-					'src/tables.minimap.css',
-					'src/tables.modeswitch.css'
-				],
+				src: ['src/*.css', '!src/tables.skin.css'],
 				dest: 'dist/tmp/<%= pkg.name %>.bare.myth.css'
-			},
-			cssstack: {
-				src: [
-					'src/tables.css',
-					'src/tables.stack.css',
-					'src/tables.stack-default-breakpoint.css'
-				],
-				dest: 'dist/tmp/<%= pkg.name %>.stackonly.myth.css'
 			},
 			cssstackmixinpre: {
 				src: [
@@ -145,7 +156,7 @@ module.exports = function(grunt) {
 				tasks: ['jshint:gruntfile']
 			},
 			src: {
-				files: ['<%= concat.cssall.src %>', '<%= concat.jsall.src %>', '<%= concat.jsautoinit.src %>'],
+				files: ['src', '!src/.jshintrc'],
 				tasks: ['src']
 			},
 			test: {
@@ -154,31 +165,49 @@ module.exports = function(grunt) {
 			},
 		},
 		uglify: {
-			js: {
-				files: {
-					'dist/<%= pkg.name %>.min.js': [ 'dist/<%= pkg.name %>.js' ],
-					'dist/stackonly/<%= pkg.name %>.stackonly.min.js': [ 'dist/stackonly/<%= pkg.name %>.stackonly.js' ]
-				}
+			all: {
+				src: [ 'dist/<%= pkg.name %>.js' ],
+				dest: 'dist/<%= pkg.name %>.min.js'
+			},
+			stack: {
+				src: [ 'dist/stackonly/<%= pkg.name %>.stackonly.js' ],
+				dest: 'dist/stackonly/<%= pkg.name %>.stackonly.min.js'
+			},
+			custom: {
+				src: [ 'dist/custom/<%= pkg.name %>.js' ],
+				dest: 'dist/custom/<%= pkg.name %>.min.js'
 			}
 		},
 		cssmin: {
-			css: {
-				files: {
-					'dist/<%= pkg.name %>.min.css': [ 'dist/<%= pkg.name %>.css' ],
-					'dist/bare/<%= pkg.name %>.bare.min.css': [ 'dist/bare/<%= pkg.name %>.bare.css' ],
-					'dist/stackonly/<%= pkg.name %>.stackonly.min.css': [ 'dist/stackonly/<%= pkg.name %>.stackonly.css' ]
-				}
+			all: {
+				src: [ 'dist/<%= pkg.name %>.css' ],
+				dest: 'dist/<%= pkg.name %>.min.css'
+			},
+			stack: {
+				src: [ 'dist/stackonly/<%= pkg.name %>.stackonly.css' ],
+				dest: 'dist/stackonly/<%= pkg.name %>.stackonly.min.css'
+			},
+			custom: {
+				src: [ 'dist/custom/<%= pkg.name %>.css' ],
+				dest: 'dist/custom/<%= pkg.name %>.min.css'
+			},
+			bare: {
+				src: [ 'dist/bare/<%= pkg.name %>.bare.css' ],
+				dest: 'dist/bare/<%= pkg.name %>.bare.min.css'
 			}
 		},
 		bytesize: {
-			dist: {
-				src: [
-					'dist/<%= pkg.name %>.min.css',
-					'dist/<%= pkg.name %>.min.js',
-					'dist/bare/<%= pkg.name %>.bare.min.css',
-					'dist/stackonly/<%= pkg.name %>.stackonly.min.css',
-					'dist/stackonly/<%= pkg.name %>.stackonly.min.js'
-				]
+			all: {
+				src: [ '<%= uglify.all.dest %>', '<%= cssmin.all.dest %>' ]
+			},
+			stack: {
+				src: [ '<%= uglify.stack.dest %>', '<%= cssmin.stack.dest %>' ]
+			},
+			custom: {
+				src: [ '<%= uglify.custom.dest %>', '<%= cssmin.custom.dest %>' ]
+			},
+			bare: {
+				src: [ '<%= cssmin.bare.dest %>' ]
 			}
 		},
 		'gh-pages': {
@@ -186,15 +215,25 @@ module.exports = function(grunt) {
 			src: ['dist/**/*', 'demo/**/*', 'test/**/*']
 		},
 		myth: {
-			dist: {
+			all: {
+				src: [ 'dist/tmp/<%= pkg.name %>.myth.css' ],
+				dest: 'dist/<%= pkg.name %>.css'
+			},
+			stack: {
 				files: {
-					'dist/<%= pkg.name %>.css': '<%= concat.cssall.dest %>',
-					'dist/bare/<%= pkg.name %>.bare.css': '<%= concat.cssbare.dest %>',
-					'dist/stackonly/<%= pkg.name %>.stackonly.css': '<%= concat.cssstack.dest %>',
+					'dist/stackonly/<%= pkg.name %>.stackonly.css': [ 'dist/tmp/<%= pkg.name %>.stackonly.myth.css' ],
 					'dist/tmp/<%= pkg.name %>.stackonly-sans-mixin.scss': '<%= concat.cssstackmixinpre.dest %>'
 				}
+			},
+			custom: {
+				src: [ 'dist/tmp/<%= pkg.name %>.custom.myth.css' ],
+				dest: 'dist/custom/<%= pkg.name %>.css'
+			},
+			bare: {
+				src: [ 'dist/tmp/<%= pkg.name %>.bare.myth.css' ],
+				dest: 'dist/bare/<%= pkg.name %>.bare.css'
 			}
-		},
+		}/*,
 		compress: {
 			main: {
 				options: {
@@ -209,19 +248,32 @@ module.exports = function(grunt) {
 					{expand: true, cwd: 'dist/', src: ['bare/*'], dest: 'tablesaw/'}
 				]
 			}
-		}
+		}*/
 	});
 
 	require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-	// Default task.
+	// Private task.
 	grunt.registerTask('travis', ['jshint', 'qunit']);
-	grunt.registerTask('concat-pre', ['concat:jsautoinit', 'concat:jsall', 'concat:jsstack', 'concat:cssall', 'concat:cssbare', 'concat:cssstack', 'concat:cssstackmixinpre']);
-	grunt.registerTask('concat-post', ['concat:cssstackmixinpost']);
-	grunt.registerTask('src', ['concat-pre', 'myth', 'concat-post', 'clean:dependencies', 'copy', 'clean:post']);
-	grunt.registerTask('filesize', ['uglify', 'cssmin', 'bytesize', 'clean:post']);
+	grunt.registerTask('_clean', ['clean:dependencies', 'copy', 'clean:post']);
+	
+	// Source build task
+	grunt.registerTask('srcall', ['concat:jsautoinit', 'concat:all', 'myth:all', '_clean']);
+	grunt.registerTask('srcstack', ['concat:jsautoinit', 'concat:stack', 'concat:cssstackmixinpre', 'myth:stack', 'concat:cssstackmixinpost', '_clean']);
+	grunt.registerTask('srccustom', ['concat:custom', 'myth:custom', '_clean']);
+	grunt.registerTask('src', ['concat', 'myth', 'concat:cssstackmixinpost', '_clean']);
+	
+	// Minify
+	grunt.registerTask('minall', ['uglify:all', 'cssmin:all', 'bytesize:all', 'clean:post']);
+	grunt.registerTask('minstack', ['uglify:stack', 'cssmin:stack', 'bytesize:stack', 'clean:post']);
+	grunt.registerTask('mincustom', ['uglify:custom', 'cssmin:custom', 'bytesize:custom', 'clean:post']);
+	grunt.registerTask('min', ['uglify', 'cssmin', 'bytesize', 'clean:post']);
 
-	grunt.registerTask('default', ['jshint', 'src', 'qunit', 'filesize']);
+	// Dist, partial build does not do testing
+	grunt.registerTask('all', ['jshint', 'srcall', 'qunit', 'minall']);
+	grunt.registerTask('stack', ['jshint', 'srcstack', 'minstack']);
+	grunt.registerTask('custom', ['jshint', 'srccustom', 'mincustom']);
+	grunt.registerTask('default', ['jshint', 'src', 'qunit', 'min']);
 
 	// Deploy
 	grunt.registerTask('deploy', ['default', 'gh-pages']);

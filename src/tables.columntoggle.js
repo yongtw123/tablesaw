@@ -43,7 +43,7 @@
 		tableId = this.$table.attr( "id" );
 		id = tableId + "-popup";
 		$btnContain = $( "<div class='" + this.classes.columnBtnContain + "'></div>" );
-		$menuButton = $( "<a href='#" + id + "' class='btn btn-micro " + this.classes.columnBtn +"' data-popup-link>" +
+		$menuButton = $( '<span class="tablesaw-columnbtn-label"></span><a href="#' + id + '" class="btn btn-micro ' + this.classes.columnBtn +'" data-popup-link>' +
 										"<span>" + Tablesaw.i18n.columnBtnText + "</span></a>" );
 		$popup = $( "<div class='dialog-table-coltoggle " + this.classes.popup + "' id='" + id + "'></div>" );
 		$menu = $( "<div class='btn-group'></div>" );
