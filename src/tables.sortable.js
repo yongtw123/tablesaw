@@ -21,6 +21,7 @@
 	var pluginName = "tablesaw-sortable",
 		initSelector = "table[data-" + pluginName + "]",
 		sortableSwitchSelector = "[data-" + pluginName + "-switch]",
+		sortableMemoizeSelector = "[data-" + pluginName + "-memoize]",
 		attrs = {
 			defaultCol: "data-" + pluginName + "-default-col",
 			numericCol: "data-" + pluginName + "-numeric",
@@ -44,8 +45,7 @@
 					}
 					$(this)
 						.data("init" + pluginName, true)
-						.trigger("beforecreate." + pluginName)
-					[pluginName]("_init", o)
+						.trigger("beforecreate." + pluginName)[pluginName]("_init", o)
 						.trigger("create." + pluginName);
 				});
 			},
@@ -55,8 +55,8 @@
 					$switcher;
 
 				var addClassToTable = function () {
-					el.addClass(pluginName);
-				},
+						el.addClass(pluginName);
+					},
 					addClassToHeads = function (h) {
 						$.each(h, function (i, v) {
 							$(v).addClass(classes.head);
@@ -88,29 +88,35 @@
 
 						clearOthers(head.siblings());
 						if (head.hasClass(classes.descend)) {
-							if (!head.is('[' + attrs.forceDesc + ']')) { callSortAsc(); }
+							if (!head.is('[' + attrs.forceDesc + ']')) { callSort('asc'); }
 							else { return; /* no-op */ }
 						}
 						else if (head.hasClass(classes.ascend)) {
-							if (!head.is('[' + attrs.forceAsc + ']')) { callSortDesc(); }
+							if (!head.is('[' + attrs.forceAsc + ']')) { callSort('desc'); }
 							else { return; /* no-op */ }
 						}
 						else {
-							if (head.is('[' + attrs.forceAsc + ']')) { callSortAsc(); }
-							else { callSortDesc(); }
+							if (head.is('[' + attrs.forceAsc + ']')) { callSort('asc'); }
+							else { callSort('desc'); }
 						}						
 						
 						if ($switcher) {
 							$switcher.find('select').val(newSortValue).trigger('refresh');
 						}
 
-						function callSortAsc() {
-							el[pluginName]('sortBy', v, true);
-							newSortValue += '_asc';
-						}
-						function callSortDesc() {
-							el[pluginName]('sortBy', v);
-							newSortValue += '_desc';
+						function callSort(order) {
+							if (order === 'desc') {
+								el[pluginName]('sortBy', v);
+								newSortValue += '_desc';
+							}
+							else if (order === 'asc') {
+								el[pluginName]('sortBy', v, true);
+								newSortValue += '_asc';
+							}
+							else {
+								throw "Invalid sort order!";
+							}
+							el[pluginName]('memoizeSort', newSortValue);
 						}
 					},
 					handleDefault = function (heads) {
@@ -171,8 +177,10 @@
 						
 						$switcher.find('.btn').tablesawbtn();
 						$switcher.find('select').on('change', function () {
-							var val = $(this).val().split('_'),
+							var raw = $(this).val(),
+								val = raw.split('_'),
 								head = heads.eq(val[0]);
+							el[pluginName]('memoizeSort', raw);
 							clearOthers(head.siblings());
 							el[pluginName]('sortBy', head.get(0), val[1] === 'asc');
 						});
@@ -190,7 +198,35 @@
 				makeHeadsActionable(heads, headsOnAction);
 				handleDefault(heads);
 				if (el.is(sortableSwitchSelector)) { addSwitcher(heads, el.find('tbody tr:nth-child(-n+3)')); }
+				
+				/* check if has previous sort setting */
+				if (el.is(sortableMemoizeSelector)) {
+					var sortval = el[pluginName]('retrieveSort');
+					if (sortval) {
+						var tmp = sortval.split('_'),
+							head = heads.eq(tmp[0]);
+						clearOthers(head.siblings());
+						el[pluginName]('sortBy', head.get(0), tmp[1] === 'asc');
+						$('.'+classes.switcher).find('select').val(sortval).trigger('refresh');
+					}					
+				}
+				/* none, proceed normally */
 				sortImmediately(heads);
+			},
+			memoizeSort: function(val) {
+				var d = new Date();
+				d.setTime(d.getTime() + 1*24*60*1000);
+				document.cookie = 'sortby='+val+';path=/;expires='+d.toUTCString();
+			},
+			retrieveSort: function() {
+				var cookies = document.cookie.split(';');
+				for (var i=0; i<cookies.length; i++) {
+					var cookie = cookies[i].trim();
+					if (cookie.indexOf('sortby') === 0) { 
+						return cookie.split('=')[1];
+					}
+				}
+				return null;
 			},
 			getColumnNumber: function (col) {
 				return $(col).prevAll().length;
