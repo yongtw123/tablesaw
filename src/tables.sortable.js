@@ -22,6 +22,7 @@
 		initSelector = "table[data-" + pluginName + "]",
 		sortableSwitchSelector = "[data-" + pluginName + "-switch]",
 		sortableMemoizeSelector = "[data-" + pluginName + "-memoize]",
+		cookieName = pluginName + '-sortby',
 		attrs = {
 			defaultCol: "data-" + pluginName + "-default-col",
 			numericCol: "data-" + pluginName + "-numeric",
@@ -83,41 +84,23 @@
 						if ($(e.target).is('a[href]')) { return; }
 
 						var head = $(this).parent(),
-							v = e.data.col,
+							//v = e.data.col,
 							newSortValue = heads.index(head);
 
-						clearOthers(head.siblings());
 						if (head.hasClass(classes.descend)) {
-							if (!head.is('[' + attrs.forceDesc + ']')) { callSort('asc'); }
+							if (!head.is('[' + attrs.forceDesc + ']')) { newSortValue += '_asc'; }
 							else { return; /* no-op */ }
 						}
 						else if (head.hasClass(classes.ascend)) {
-							if (!head.is('[' + attrs.forceAsc + ']')) { callSort('desc'); }
+							if (!head.is('[' + attrs.forceAsc + ']')) { newSortValue += '_desc'; }
 							else { return; /* no-op */ }
 						}
 						else {
-							if (head.is('[' + attrs.forceAsc + ']')) { callSort('asc'); }
-							else { callSort('desc'); }
-						}						
+							if (head.is('[' + attrs.forceAsc + ']')) { newSortValue += '_asc'; }
+							else { newSortValue += '_desc'; }
+						}
 						
-						if ($switcher) {
-							$switcher.find('select').val(newSortValue).trigger('refresh');
-						}
-
-						function callSort(order) {
-							if (order === 'desc') {
-								el[pluginName]('sortBy', v);
-								newSortValue += '_desc';
-							}
-							else if (order === 'asc') {
-								el[pluginName]('sortBy', v, true);
-								newSortValue += '_asc';
-							}
-							else {
-								throw "Invalid sort order!";
-							}
-							el[pluginName]('memoizeSort', newSortValue);
-						}
+						callSortWithSortval(newSortValue);						
 					},
 					handleDefault = function (heads) {
 						// TODO What if no default column is specified?
@@ -177,14 +160,23 @@
 						
 						$switcher.find('.btn').tablesawbtn();
 						$switcher.find('select').on('change', function () {
-							var raw = $(this).val(),
-								val = raw.split('_'),
-								head = heads.eq(val[0]);
-							el[pluginName]('memoizeSort', raw);
-							clearOthers(head.siblings());
-							el[pluginName]('sortBy', head.get(0), val[1] === 'asc');
+							callSortWithSortval($(this).val());
 						});
-					},					
+					},
+					callSort = function(head, ascending, raw) {
+						clearOthers(head.siblings());
+						el[pluginName]('sortBy', head, ascending);
+						if (el.is(sortableMemoizeSelector)) {
+							el[pluginName]('memoizeSort', raw);
+						}
+						if ($switcher) {
+							$switcher.find('select').val(raw).trigger('refresh');
+						}
+					},
+					callSortWithSortval = function(sortval) {
+						var tmp = sortval.split('_');
+						callSort(heads.eq(tmp[0]), tmp[1] === 'asc', sortval);
+					},
 					sortImmediately = function(heads) {
 						var defaultCol = $(heads).filter('[' + attrs.defaultCol + '="onLoad"]');
 						if (defaultCol.length) {
@@ -202,27 +194,21 @@
 				/* check if has previous sort setting */
 				if (el.is(sortableMemoizeSelector)) {
 					var sortval = el[pluginName]('retrieveSort');
-					if (sortval) {
-						var tmp = sortval.split('_'),
-							head = heads.eq(tmp[0]);
-						clearOthers(head.siblings());
-						el[pluginName]('sortBy', head.get(0), tmp[1] === 'asc');
-						$('.'+classes.switcher).find('select').val(sortval).trigger('refresh');
-					}					
+					if (sortval) { callSortWithSortval(sortval); }					
 				}
-				/* none, proceed normally */
+				/* none OR no sortval detected, proceed normally */
 				sortImmediately(heads);
 			},
 			memoizeSort: function(val) {
 				var d = new Date();
 				d.setTime(d.getTime() + 1*24*60*1000);
-				document.cookie = 'sortby='+val+';path=/;expires='+d.toUTCString();
+				document.cookie = cookieName+'='+val+';path=/;expires='+d.toUTCString();
 			},
 			retrieveSort: function() {
 				var cookies = document.cookie.split(';');
 				for (var i=0; i<cookies.length; i++) {
 					var cookie = cookies[i].trim();
-					if (cookie.indexOf('sortby') === 0) { 
+					if (cookie.indexOf(cookieName) === 0) { 
 						return cookie.split('=')[1];
 					}
 				}
