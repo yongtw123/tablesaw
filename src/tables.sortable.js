@@ -23,6 +23,7 @@
 		sortableSwitchSelector = "[data-" + pluginName + "-switch]",
 		sortableMemoizeSelector = "[data-" + pluginName + "-memoize]",
 		cookieName = pluginName + '-sortby',
+        callSortHook, /* reference to methods inside _init closure */
 		attrs = {
 			defaultCol: "data-" + pluginName + "-default-col",
 			numericCol: "data-" + pluginName + "-numeric",
@@ -189,16 +190,26 @@
 				addClassToHeads(heads);
 				makeHeadsActionable(heads, headsOnAction);
 				handleDefault(heads);
-				if (el.is(sortableSwitchSelector)) { addSwitcher(heads, el.find('tbody tr:nth-child(-n+3)')); }
-				
+                if (el.is(sortableSwitchSelector)) {
+                    addSwitcher(heads, el.find('tbody tr:nth-child(-n+3)'));
+                }
+                
 				/* check if has previous sort setting */
 				if (el.is(sortableMemoizeSelector)) {
-					var sortval = el[pluginName]('retrieveSort');
-					if (sortval) { callSortWithSortval(sortval); }					
+                    //export closure function
+                    callSortHook = function() {
+                        var sortval = el[pluginName]('retrieveSort');
+                        if (sortval) { callSortWithSortval(sortval); return true;}
+                        else { return false; }	
+                    };
+				    if (el[pluginName]('refresh')) { return; }
 				}
 				/* none OR no sortval detected, proceed normally */
 				sortImmediately(heads);
 			},
+            refresh: function() {
+                if (typeof(callSortHook) === 'function') { return callSortHook(); }
+            },
 			memoizeSort: function(val) {
 				var d = new Date();
 				d.setTime(d.getTime() + 1*24*60*1000);
@@ -223,17 +234,17 @@
 			sortRows: function (rows, colNum, ascending, col) {
 				var cells, fn, sorted;
 				var getCells = function (rows) {
-					var cells = [];
-					$.each(rows, function (i, r) {
-						var element = $(r).children().get(colNum);
-						cells.push({
-							element: element,
-							cell: getSortValue(element),
-							rowNum: i
-						});
-					});
-					return cells;
-				},
+                        var cells = [];
+                        $.each(rows, function (i, r) {
+                            var element = $(r).children().get(colNum);
+                            cells.push({
+                                element: element,
+                                cell: getSortValue(element),
+                                rowNum: i
+                            });
+                        });
+                        return cells;
+                    },
 					getSortFxn = function (ascending, forceNumeric) {
 						var fn,
 							regex = /[^\-\+\d\.]/g;

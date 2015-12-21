@@ -233,7 +233,8 @@ module.exports = function(grunt) {
 				src: [ 'dist/tmp/<%= pkg.name %>.bare.myth.css' ],
 				dest: 'dist/bare/<%= pkg.name %>.bare.css'
 			}
-		}/*,
+		},
+        /*
 		compress: {
 			main: {
 				options: {
@@ -249,6 +250,11 @@ module.exports = function(grunt) {
 				]
 			}
 		}*/
+        serve: {
+            options: {
+                port: 9002
+            }
+        }
 	});
 
 	require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
