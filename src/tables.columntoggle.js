@@ -125,7 +125,11 @@
 		this.$menu = $menu;
 
 		$(window).on( "resize." + tableId, function(){
-			self.refreshToggle();
+			if ( $('#'+tableId).length > 0 ) {
+				self.refreshToggle();
+			} else {
+				$(window).off( "resize." + tableId );
+			}
 		});
 
 		this.refreshToggle();
