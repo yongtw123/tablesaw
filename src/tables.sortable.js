@@ -23,7 +23,6 @@
 		sortableSwitchSelector = "[data-" + pluginName + "-switch]",
 		sortableMemoizeSelector = "[data-" + pluginName + "-memoize]",
 		cookieName = pluginName + '-sortby',
-        callSortHook, /* reference to methods inside _init closure */
 		attrs = {
 			defaultCol: "data-" + pluginName + "-default-col",
 			numericCol: "data-" + pluginName + "-numeric",
@@ -183,6 +182,12 @@
 						if (defaultCol.length) {
 							el[pluginName]('sortBy', defaultCol, defaultCol.hasClass(classes.ascend));
 						}
+					},
+					resortHandler = function(e, sv) {
+						//console.log(el);
+						e.stopPropagation();
+                        if (sv) { callSortWithSortval(sv); }
+                        else { console.error('Tablesaw.sortable: no sortval, resort ignored'); }	
 					};
 
 				addClassToTable();
@@ -196,19 +201,24 @@
                 
 				/* check if has previous sort setting */
 				if (el.is(sortableMemoizeSelector)) {
-                    //export closure function
-                    callSortHook = function() {
-                        var sortval = el[pluginName]('retrieveSort');
-                        if (sortval) { callSortWithSortval(sortval); return true;}
-                        else { return false; }	
-                    };
-				    if (el[pluginName]('refresh')) { return; }
+                    el.on('resort', resortHandler);
+					if (el[pluginName]('resort')) { return; }
 				}
 				/* none OR no sortval detected, proceed normally */
 				sortImmediately(heads);
 			},
-            refresh: function() {
-                if (typeof(callSortHook) === 'function') { return callSortHook(); }
+            resort: function() {
+				/* Exposing closure method does not work here: each invocation is in different context.
+				   Resort to event trigger 
+				*/
+				var el = $(this),
+					sortval = el[pluginName]('retrieveSort');
+				if (sortval) {
+					$(this).trigger('resort', [sortval]);
+					return true;
+				} else {
+					return false;
+				}
             },
 			memoizeSort: function(val) {
 				var d = new Date();
