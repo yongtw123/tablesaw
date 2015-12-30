@@ -10,8 +10,25 @@
 }
 .tablesaw-sortable th.tablesaw-sortable-head,
 .tablesaw-sortable tr:first-child th.tablesaw-sortable-head {
-	padding: 0;
+	/* padding: 0; */
+    cursor: pointer;
+    text-decoration: underline;
 }
+.tablesaw-sortable th.tablesaw-sortable-ascending:after,
+.tablesaw-sortable th.tablesaw-sortable-descending:after {
+    width: 7px;
+	height: 10px;
+	content: "\0020";
+	position: absolute;
+	right: .5em;
+}
+.tablesaw-sortable th.tablesaw-sortable-ascending:after {
+    content: '\2191';
+}
+.tablesaw-sortable th.tablesaw-sortable-descending:after {
+    content: '\2193';
+}
+/*
 .tablesaw-sortable th.tablesaw-sortable-head button {
 	padding-top: .9em;
 	padding-bottom: .7em;
@@ -43,6 +60,7 @@
 .tablesaw-sortable .tablesaw-sortable-head.tablesaw-sortable-descending button:after {
 	content: "\2193";
 }
+*/
 
 .tablesaw-sortable .not-applicable:after {
 	content: "--";

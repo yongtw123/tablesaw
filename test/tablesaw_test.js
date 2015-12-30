@@ -167,7 +167,7 @@
 
 	test( 'Can sort descending', function() {
 		var previousRow1Text = $table.find( 'tbody tr td' ).eq( 0 ).text(),
-			$sortButton = $table.find( '.tablesaw-sortable-head button' ).eq( 0 );
+			$sortButton = $table.find( 'th.tablesaw-sortable-head' ).eq( 0 );
 
 		$sortButton.click();
 
@@ -179,7 +179,7 @@
 	});
 
 	test( 'Can sort numeric descending', function() {
-		var $sortButton = $table.find( '.tablesaw-sortable-head button' ).eq( 1 );
+		var $sortButton = $table.find( 'th.tablesaw-sortable-head' ).eq( 1 );
 
 		$sortButton.click();
 
@@ -192,7 +192,7 @@
 
 	test( 'Sort works with floats', function() {
 		var previousText = "Body Row 1.2",
-			$sortButton = $table.find( '.tablesaw-sortable-head button' ).eq( 0 ),
+			$sortButton = $table.find( 'th.tablesaw-sortable-head' ).eq( 0 ),
 			rows = $table.find( 'tbody tr' ).length;
 
 		$sortButton.click();
@@ -205,7 +205,7 @@
 
 	test( 'Sort is case insensitive', function() {
 		var previousText = "body row 4",
-			$sortButton = $table.find( '.tablesaw-sortable-head button' ).eq( 0 );
+			$sortButton = $table.find( 'th.tablesaw-sortable-head' ).eq( 0 );
 
 		$sortButton.click();
 		equal( $table.find( 'tbody tr:eq(0) td:eq(0)' ).text(), previousText, previousText + ' is in the first row (descending)' );

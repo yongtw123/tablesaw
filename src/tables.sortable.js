@@ -65,9 +65,12 @@
 					},
 					makeHeadsActionable = function (h, fn) {
 						$.each(h, function (i, v) {
+                            /*
 							var b = $("<button class='" + classes.sortButton + "'/>");
 							b.bind("click", { col: v }, fn);
 							$(v).wrapInner(b);
+                            */
+                            $(v).bind("click", { col: v }, fn);
 						});
 					},
 					clearOthers = function (sibs) {
@@ -83,8 +86,9 @@
 						e.stopPropagation();
 						if ($(e.target).is('a[href]')) { return; }
 
-						var head = $(this).parent(),
+						var //head = $(this).parent(),
 							//v = e.data.col,
+                            head = $(this),
 							newSortValue = heads.index(head);
 
 						if (head.hasClass(classes.descend)) {
@@ -137,17 +141,17 @@
 										}
 									});
 									isNumeric = numericCount === numericCountMax;
-									$t.attr("data-sortable-numeric", isNumeric ? "" : "false");
+									$t.attr(attrs.numericCol, isNumeric ? "" : "false");
 								}
 
 								if (!$t.is('[' + attrs.forceDesc + ']')) { //add asc option if desc NOT forced
-									html.push('<option' + (isDefaultCol && !isDescending ? ' selected' : '') + ' value="' + j + '_asc">' + $t.text() + ' ' + (isNumeric ? '&#x2191;' : '(A-Z)') + '</option>');
+									html.push('<option' + (isDefaultCol && !isDescending ? ' selected' : '') + ' value="' + j + '_asc">' + $t.text() + ' ' + (isNumeric ? /*'&#x2191;'*/ '(0-9)' : '(A-Z)') + '</option>');
 								}
 								if (!$t.is('[' + attrs.forceAsc + ']')) { //add desc option if asc NOT forced
-									html.push('<option' + (isDefaultCol && isDescending ? ' selected' : '') + ' value="' + j + '_desc">' + $t.text() + ' ' + (isNumeric ? '&#x2193;' : '(Z-A)') + '</option>');
+									html.push('<option' + (isDefaultCol && isDescending ? ' selected' : '') + ' value="' + j + '_desc">' + $t.text() + ' ' + (isNumeric ? /*'&#x2193;'*/ '(9-0)' : '(Z-A)') + '</option>');
 								}
 							});
-							html.push('</select></span></label>');
+							html.push('</select></span></label>'); 
 
 							return html.join('');
 						});
@@ -302,13 +306,11 @@
 			makeColDefault: function (col, a) {
 				var c = $(col);
 				c.attr(attrs.defaultCol, "true");
-				if (a) {
-					c.removeClass(classes.descend);
-					c.addClass(classes.ascend);
-				} else {
-					c.removeClass(classes.ascend);
-					c.addClass(classes.descend);
-				}
+                if (a) {
+                    c.removeClass(classes.descend).addClass(classes.ascend);
+                } else {
+                    c.removeClass(classes.ascend).addClass(classes.descend);
+                }
 			},
 			sortBy: function (col, ascending) {
 				var el = $(this), colNum, rows;
