@@ -20,19 +20,26 @@
 
 	var pluginName = "tablesaw-sortable",
 		initSelector = "table[data-" + pluginName + "]",
+        sortableColSelector = "[data-" + pluginName + "-col]",
 		sortableSwitchSelector = "[data-" + pluginName + "-switch]",
-		sortableMemoizeSelector = "[data-" + pluginName + "-memoize]",
+        optionsSelector = "[data-" + pluginName + "-options]",
+        memoizeSelector = "[data-" + pluginName + "-memoize]",
 		cookieName = pluginName + '-sortby',
-		attrs = {
-			defaultCol: "data-" + pluginName + "-default-col",
-			numericCol: "data-" + pluginName + "-numeric",
-			forceAsc: "data-" + pluginName + "-force-asc",
-			forceDesc: "data-" + pluginName + "-force-desc"
+		options = {
+			default: "default",
+			numeric: "numeric",
+			forceAsc: "force-asc",
+			forceDesc: "force-desc",
+            noHint: "no-hint"
 		},
 		classes = {
+            defaultCol: pluginName +  "-default-col",
+            numericCol: pluginName + "-numeric-col",
 			head: pluginName + "-head",
 			ascend: pluginName + "-ascending",
 			descend: pluginName + "-descending",
+            ascendMark: pluginName + "-ascending-mark",
+            descendMark: pluginName + "-descending-mark",
 			switcher: pluginName + "-switch",
 			tableToolbar: 'tablesaw-toolbar',
 			sortButton: pluginName + "-btn"
@@ -63,7 +70,7 @@
 							$(v).addClass(classes.head);
 						});
 					},
-					makeHeadsActionable = function (h, fn) {
+                    makeHeadsActionable = function (h, fn) {
 						$.each(h, function (i, v) {
                             /*
 							var b = $("<button class='" + classes.sortButton + "'/>");
@@ -76,9 +83,13 @@
 					clearOthers = function (sibs) {
 						$.each(sibs, function (i, v) {
 							var col = $(v);
-							col.removeAttr(attrs.defaultCol);
-							col.removeClass(classes.ascend);
-							col.removeClass(classes.descend);
+							col.removeClass([
+                                classes.defaultCol,
+                                classes.ascend,
+                                classes.ascendMark,
+                                classes.descend,
+                                classes.descendMark
+                            ].join(' '));
 						});
 					},
 					headsOnAction = function (e) { //callback function for th button
@@ -92,29 +103,56 @@
 							newSortValue = heads.index(head);
 
 						if (head.hasClass(classes.descend)) {
-							if (!head.is('[' + attrs.forceDesc + ']')) { newSortValue += '_asc'; }
+							if (!el[pluginName]('hasOpt', head, options.forceDesc)) { newSortValue += '_asc'; }
 							else { return; /* no-op */ }
 						}
 						else if (head.hasClass(classes.ascend)) {
-							if (!head.is('[' + attrs.forceAsc + ']')) { newSortValue += '_desc'; }
+							if (!el[pluginName]('hasOpt', head, options.forceAsc)) { newSortValue += '_desc'; }
 							else { return; /* no-op */ }
 						}
 						else {
-							if (head.is('[' + attrs.forceAsc + ']')) { newSortValue += '_asc'; }
+							if (el[pluginName]('hasOpt', head, options.forceAsc)) { newSortValue += '_asc'; }
 							else { newSortValue += '_desc'; }
 						}
 						
 						callSortWithSortval(newSortValue);						
 					},
-					handleDefault = function (heads) {
-						// TODO What if no default column is specified?
-						var defaultCol = $(heads).filter('[' + attrs.defaultCol + ']');
-						if (defaultCol.is('[' + attrs.forceDesc + ']')) {
-							defaultCol.addClass(classes.descend);
-						}
-						else if (defaultCol.is('[' + attrs.forceAsc + ']') || !defaultCol.hasClass(classes.descend)) {
-							defaultCol.addClass(classes.ascend);
-						}
+					processOptions = function (heads) {						
+                        $.each(heads, function() {
+                            var $t = $(this),
+                                o = {},
+                                isNumeric;
+                            /* cache options */
+                            $.each(options, function(k, v) {
+                               o[k] = el[pluginName]('hasOpt', $t, v); 
+                            });
+                            
+                            /* handle default */
+                            if (o[options.default]) {
+                                el[pluginName]('makeColDefault', $t, 
+                                    !o[options.forceDesc] ? true : false,
+                                    o[options.noHint]
+                                );
+                            }                            
+                            
+                            /* handle numeric */
+                            if (o[options.numeric]) { 
+                                isNumeric = true;
+                            }
+                            else {
+                                var numericCount = 0;
+                                // Check only the first four rows to see if the column is numbers.
+                                var numericCountMax = 5;
+
+                                $(this.cells).slice(0, numericCountMax).each(function () {
+                                    if (!isNaN(parseInt(getSortValue(this), 10))) {
+                                        numericCount++;
+                                    }
+                                });
+                                isNumeric = numericCount === numericCountMax;
+                            }
+                            if (isNumeric) { $t.addClass(classes.numericCol); }
+                        });                        
 					},
 					addSwitcher = function (heads) {
 						$switcher = $('<div>').addClass(classes.switcher).addClass(classes.tableToolbar).html(function () {
@@ -122,33 +160,25 @@
 
 							html.push('<span class="btn btn-small">&#160;<select>');
 							heads.each(function (j) {
-								var $t = $(this);
-								var isDefaultCol = $t.is("[" + attrs.defaultCol + "]");
-								var isDescending = $t.hasClass(classes.descend);
+								var $t = $(this),
+								    isDefaultCol = $t.hasClass(classes.defaultCol),
+								    isDescending = $t.hasClass(classes.descend),
+                                    isNumeric = $t.hasClass(classes.numericCol),
+                                    isNoHint = el[pluginName]('hasOpt', $t, options.noHint);
 
-								var isNumeric;
-								if ($t.is('[' + attrs.numericCol + ']')) {
-									isNumeric = true;
+								if (!el[pluginName]('hasOpt', $t, options.forceDesc)) { //add asc option if desc NOT forced
+									html.push('<option' + (isDefaultCol && !isDescending ? ' selected' : '') + ' value="' + j + '_asc">' + $t.text());
+                                    if (!isNoHint) {
+                                        html.push(' ' + (isNumeric ? /*'&#x2191;'*/ '(0-9)' : '(A-Z)'));
+                                    }
+                                    html.push('</option>');
 								}
-								else {
-									var numericCount = 0;
-									// Check only the first four rows to see if the column is numbers.
-									var numericCountMax = 5;
-
-									$(this.cells).slice(0, numericCountMax).each(function () {
-										if (!isNaN(parseInt(getSortValue(this), 10))) {
-											numericCount++;
-										}
-									});
-									isNumeric = numericCount === numericCountMax;
-									$t.attr(attrs.numericCol, isNumeric ? "" : "false");
-								}
-
-								if (!$t.is('[' + attrs.forceDesc + ']')) { //add asc option if desc NOT forced
-									html.push('<option' + (isDefaultCol && !isDescending ? ' selected' : '') + ' value="' + j + '_asc">' + $t.text() + ' ' + (isNumeric ? /*'&#x2191;'*/ '(0-9)' : '(A-Z)') + '</option>');
-								}
-								if (!$t.is('[' + attrs.forceAsc + ']')) { //add desc option if asc NOT forced
-									html.push('<option' + (isDefaultCol && isDescending ? ' selected' : '') + ' value="' + j + '_desc">' + $t.text() + ' ' + (isNumeric ? /*'&#x2193;'*/ '(9-0)' : '(Z-A)') + '</option>');
+								if (!el[pluginName]('hasOpt', $t, options.forceAsc)) { //add desc option if asc NOT forced
+                                    html.push('<option' + (isDefaultCol && isDescending ? ' selected' : '') + ' value="' + j + '_desc">' + $t.text());
+                                    if (!isNoHint) {
+                                        html.push(' ' + (isNumeric ? /*'&#x2193;'*/ '(9-0)' : '(Z-A)'));
+                                    }
+                                    html.push('</option>');
 								}
 							});
 							html.push('</select></span></label>'); 
@@ -170,7 +200,7 @@
 					callSort = function(head, ascending, raw) {
 						clearOthers(head.siblings());
 						el[pluginName]('sortBy', head, ascending);
-						if (el.is(sortableMemoizeSelector)) {
+						if (el.is(memoizeSelector)) {
 							el[pluginName]('memoizeSort', raw);
 						}
 						if ($switcher) {
@@ -182,7 +212,7 @@
 						callSort(heads.eq(tmp[0]), tmp[1] === 'asc', sortval);
 					},
 					sortImmediately = function(heads) {
-						var defaultCol = $(heads).filter('[' + attrs.defaultCol + '="onLoad"]');
+						var defaultCol = $(heads).filter(classes.defaultCol);
 						if (defaultCol.length) {
 							el[pluginName]('sortBy', defaultCol, defaultCol.hasClass(classes.ascend));
 						}
@@ -195,16 +225,16 @@
 					};
 
 				addClassToTable();
-				heads = el.find("thead th[data-" + pluginName + "-col]");
+				heads = el.find("thead th"+sortableColSelector);
 				addClassToHeads(heads);
 				makeHeadsActionable(heads, headsOnAction);
-				handleDefault(heads);
+				processOptions(heads);
                 if (el.is(sortableSwitchSelector)) {
                     addSwitcher(heads, el.find('tbody tr:nth-child(-n+3)'));
                 }
                 
 				/* check if has previous sort setting */
-				if (el.is(sortableMemoizeSelector)) {
+				if (el.is(memoizeSelector)) {
                     el.on('resort', resortHandler);
 					if (el[pluginName]('resort')) { return; }
 				}
@@ -245,6 +275,10 @@
 			getTableRows: function () {
 				return $(this).find("tbody tr");
 			},
+            hasOpt: function(head, opt) {
+                if (!head.is(optionsSelector)) { return false; }
+                return (head.attr(optionsSelector.replace(/(\[|\])/g, '')).indexOf(opt) > 0) ? true : false;
+            },
 			sortRows: function (rows, colNum, ascending, col) {
 				var cells, fn, sorted;
 				var getCells = function (rows) {
@@ -293,7 +327,7 @@
 				cells = getCells(rows);
 				var customFn = $(col).data('tablesaw-sort');
 				fn = (customFn && typeof customFn === "function" ? customFn(ascending) : false) ||
-				getSortFxn(ascending, $(col).is('['+attrs.numericCol+']') && !$(col).is('['+attrs.numericCol+'="false"]'));
+				getSortFxn(ascending, $(col).hasClass(classes.numericCol));
 				sorted = cells.sort(fn);
 				rows = applyToRows(sorted, rows);
 				return rows;
@@ -303,13 +337,16 @@
 					body = el.find("tbody");
 				body.html(rows);
 			},
-			makeColDefault: function (col, a) {
-				var c = $(col);
-				c.attr(attrs.defaultCol, "true");
-                if (a) {
+			makeColDefault: function (col, asc, nohint) {
+				var c = $(col),
+                    nh = nohint || $(this)[pluginName]('hasOpt', c, options.noHint);
+				c.addClass(classes.defaultCol);
+                if (asc) {
                     c.removeClass(classes.descend).addClass(classes.ascend);
+                    if (!nh) { c.removeClass(classes.descendMark).addClass(classes.ascendMark); }
                 } else {
                     c.removeClass(classes.ascend).addClass(classes.descend);
+                    if (!nh) { c.removeClass(classes.ascendMark).addClass(classes.descendMark); }
                 }
 			},
 			sortBy: function (col, ascending) {

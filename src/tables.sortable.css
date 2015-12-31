@@ -5,27 +5,34 @@
 	position: relative;
 }
 .tablesaw-sortable thead tr th {
-	padding-right: 1.6em;
+	/* padding-right: 1.6em; */
 	vertical-align: top;
 }
-.tablesaw-sortable th.tablesaw-sortable-head,
-.tablesaw-sortable tr:first-child th.tablesaw-sortable-head {
+.tablesaw-sortable th.tablesaw-sortable-head {
 	/* padding: 0; */
+    padding-right: 1.6em;
     cursor: pointer;
+    text-decoration: none;
+}
+.tablesaw-sortable th.tablesaw-sortable-ascending,
+.tablesaw-sortable th.tablesaw-sortable-descending {
     text-decoration: underline;
 }
-.tablesaw-sortable th.tablesaw-sortable-ascending:after,
-.tablesaw-sortable th.tablesaw-sortable-descending:after {
+.tablesaw-sortable th.tablesaw-sortable-no-mark {
+    padding-right: 0;
+}
+.tablesaw-sortable th.tablesaw-sortable-ascending-mark:after,
+.tablesaw-sortable th.tablesaw-sortable-descending-mark:after {
     width: 7px;
 	height: 10px;
 	content: "\0020";
 	position: absolute;
 	right: .5em;
 }
-.tablesaw-sortable th.tablesaw-sortable-ascending:after {
+.tablesaw-sortable th.tablesaw-sortable-ascending-mark:after {
     content: '\2191';
 }
-.tablesaw-sortable th.tablesaw-sortable-descending:after {
+.tablesaw-sortable th.tablesaw-sortable-descending-mark:after {
     content: '\2193';
 }
 /*
