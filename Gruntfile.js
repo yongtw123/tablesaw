@@ -59,7 +59,7 @@ module.exports = function(grunt) {
 				files: [{
 					expand: true,
 					flatten: true,
-					src: [ 'node_modules/qunitjs/qunit/*' ],
+					src: [ 'node_modules/qunit/qunit/*' ],
 					dest: 'dist/dependencies/',
 					filter: 'isFile'
 				}]
@@ -173,7 +173,7 @@ module.exports = function(grunt) {
 				tasks: ['src']
 			},
 			test: {
-				files: ['dist/<%= pkg.name %>.js'],
+				files: ['dist/<%= pkg.name %>.js', 'test-qunit/**/*.js', 'test/**/*.js'],
 				tasks: ['test']
 			}
 		},
@@ -213,7 +213,7 @@ module.exports = function(grunt) {
 		},
 		'gh-pages': {
 			options: {},
-			src: ['dist/**/*', 'demo/**/*', 'test/**/*']
+			src: ['dist/**/*', 'demo/**/*', 'test-qunit/**/*']
 		},
 		myth: {
 			dist: {

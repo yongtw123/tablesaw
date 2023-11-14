@@ -1,3 +1,5 @@
+:warning: This project is archived and the repository is no longer maintained. 
+
 # Tablesaw
 
 [![npm version](https://badge.fury.io/js/tablesaw.svg)](https://badge.fury.io/js/tablesaw)
@@ -23,6 +25,12 @@ A set of plugins for responsive tables.
 * [Browser Support](#browser-support)
 * [Bundler Compatibility](#bundler-compatibility)
 
+## Roadmap and Enhancement Queue
+
+This repository is now using [lodash style issue management](https://twitter.com/samselikoff/status/991395669016436736) for enhancements. This means enhancement issues will be closed instead of leaving them open.
+
+* Look through [the enhancement backlog](https://github.com/filamentgroup/tablesaw/issues?q=label%3Aneeds-votes+is%3Aclosed+sort%3Areactions-%2B1-desc) and vote for your favorite features by adding a 👍 to the top comment.
+
 ## Stack Mode
 
 * [Stack Demo](http://filamentgroup.github.io/tablesaw/demo/stack.html) and [Stack-Only Demo](http://filamentgroup.github.io/tablesaw/demo/stackonly.html)
@@ -39,7 +47,7 @@ If you only want to use the Stack Table and don’t want all the extra features 
 
 | Option | Description |
 | --- | --- |
-| Opt out of inline labels | To opt-out of inline label creation (the table header cell text that shows at small breakpoints) on a per-table basis, use `<table data-tablesaw-no-labels>`; on a per-row basis, use `<tr data-tablesaw-no-labels>`. |
+| Opt out of inline labels | To opt-out of inline label creation (the table header cell text that shows at small breakpoints) on a per-table basis, use `<table data-tablesaw-no-labels>`; on a per-row basis, use `<tr data-tablesaw-no-labels>`; on a per-cell basis, use `<td data-tablesaw-no-labels>` (added in v3.1.0) |
 | Hide headers for empty body cells | When the table cell is empty, use `<table data-tablesaw-hide-empty>` to hide the header when stacked. |
 
 ## Column Toggle Mode
@@ -290,6 +298,17 @@ Tablesaw.init();
 Tablesaw.init( myElement ); // OR pass an element to only init within a context
 ```
 
+#### Dynamically Loading Tablesaw
+
+For user interfaces that are dynamically built, Tablesaw can be loaded on an as-needed basis.  
+Here's how you might do this with jQuery:
+
+```js
+$('head').append('<script src="tablesaw.js"></script>');
+```
+
+Following that, tables may be initialized manually as they are created.
+
 ### Using Stack-Only Tablesaw
 
 * [Stack-Only Demo](http://filamentgroup.github.io/tablesaw/demo/stackonly.html)
@@ -386,6 +405,8 @@ Run `npm install` to install dependencies and then `grunt` to build the project 
 
 ## Release Names
 
+* [3.1.0: Acacia](https://github.com/filamentgroup/tablesaw/releases/tag/v3.1.0)
+* [3.0.6: Wonderboom](https://github.com/filamentgroup/tablesaw/releases/tag/v3.0.6)
 * [3.0.3: Cucumbertree](https://github.com/filamentgroup/tablesaw/releases/tag/v3.0.3)
 * [3.0.2: Bald Cypress](https://github.com/filamentgroup/tablesaw/releases/tag/v3.0.2)
 * [3.0.1: Cypress](https://github.com/filamentgroup/tablesaw/releases/tag/v3.0.1)
