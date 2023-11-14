@@ -104,7 +104,7 @@
 
 					if (el.is(memorizeSortSelector)) {
 						memorizeSort({
-							label: headCell.text(),
+							label: headCell.text().trim(),
 							order: headCell.is("." + classes.descend) ? "desc" : "asc"
 						});
 					}
@@ -194,7 +194,13 @@
 						.addClass(classes.switcher)
 						.addClass(classes.tableToolbar);
 
-					var html = ['<label><span class="' + classes.switcherCaption + '">' + Tablesaw.i18n.sort + ':</span>'];
+					var html = [
+						'<label><span class="' +
+							classes.switcherCaption +
+							'">' +
+							Tablesaw.i18n.sort +
+							":</span>"
+					];
 
 					// TODO next major version: remove .btn
 					html.push('<span class="btn tablesaw-btn"><select>');
@@ -264,7 +270,7 @@
 
 						if (el.is(memorizeSortSelector)) {
 							memorizeSort({
-								label: head.text(),
+								label: head.text().trim(),
 								order: val[1]
 							});
 						}
@@ -277,9 +283,12 @@
 					var d = new Date();
 					d.setTime(d.getTime() + 1 * 24 * 60 * 1000);
 					for (var key in obj) {
-						document.cookie = [key + "=" + obj[key], "path=/", "expires=" + d.toUTCString()].join(
-							";"
-						);
+						document.cookie = [
+							key + "=" + obj[key],
+							"Path=/",
+							"Expires=" + d.toUTCString(),
+							"SameSite=Strict"
+						].join(";");
 					}
 				}
 
@@ -287,9 +296,7 @@
 					var pastSort = {};
 					document.cookie.split(";").forEach(function(cookie) {
 						var tokens = cookie.split("=");
-						if (tokens.length == 2) {
-							pastSort[tokens[0].trim()] = tokens[1].trim();
-						} //else no or bad cookie
+						pastSort[tokens[0].trim()] = tokens[1].trim();
 					});
 					return pastSort;
 				}
