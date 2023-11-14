@@ -171,7 +171,12 @@
 				function suggestDefault(heads) {
 					var past = retrieveSort();
 					var pastDefaultCol = heads.filter(function(index) {
-						return heads.eq(index).text() === past.label;
+						return (
+							heads
+								.eq(index)
+								.text()
+								.trim() === past.label
+						);
 					});
 					if (pastDefaultCol.length > 0) {
 						el[pluginName]("makeColDefault", pastDefaultCol, past.order === "desc" ? false : true);
@@ -296,7 +301,9 @@
 					var pastSort = {};
 					document.cookie.split(";").forEach(function(cookie) {
 						var tokens = cookie.split("=");
-						pastSort[tokens[0].trim()] = tokens[1].trim();
+						if (tokens.length == 2) {
+							pastSort[tokens[0].trim()] = tokens[1].trim();
+						} // else no cookie
 					});
 					return pastSort;
 				}

@@ -1204,7 +1204,7 @@ if (Tablesaw.mustard) {
 				function suggestDefault(heads) {
 					var past = retrieveSort();
 					var pastDefaultCol = heads.filter(function(index) {
-						return heads.eq(index).text() === past.label;
+						return heads.eq(index).text().trim() === past.label;
 					});
 					if (pastDefaultCol.length > 0) {
 						el[pluginName]("makeColDefault", pastDefaultCol, past.order === "desc" ? false : true);
@@ -1227,7 +1227,13 @@ if (Tablesaw.mustard) {
 						.addClass(classes.switcher)
 						.addClass(classes.tableToolbar);
 
-					var html = ['<label><span class="' + classes.switcherCaption + '">' + Tablesaw.i18n.sort + ':</span>'];
+					var html = [
+						'<label><span class="' +
+							classes.switcherCaption +
+							'">' +
+							Tablesaw.i18n.sort +
+							":</span>"
+					];
 
 					// TODO next major version: remove .btn
 					html.push('<span class="btn tablesaw-btn"><select>');
@@ -1290,7 +1296,9 @@ if (Tablesaw.mustard) {
 					}
 					$switcher.find(".tablesaw-btn").tablesawbtn();
 					$switcher.find("select").on("change", function() {
-						var val = $(this).val().split("_"),
+						var val = $(this)
+								.val()
+								.split("_"),
 							head = heads.eq(val[0]);
 
 						if (el.is(memorizeSortSelector)) {
@@ -1321,7 +1329,9 @@ if (Tablesaw.mustard) {
 					var pastSort = {};
 					document.cookie.split(";").forEach(function(cookie) {
 						var tokens = cookie.split("=");
-						pastSort[tokens[0].trim()] = tokens[1].trim();
+						if (tokens.length == 2) {
+							pastSort[tokens[0].trim()] = tokens[1].trim();
+						} // else no cookie
 					});
 					return pastSort;
 				}
