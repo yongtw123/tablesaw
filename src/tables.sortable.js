@@ -289,7 +289,7 @@
 					d.setTime(d.getTime() + 1 * 24 * 60 * 1000);
 					for (var key in obj) {
 						document.cookie = [
-							key + "=" + obj[key],
+							encodeURIComponent(key) + "=" + encodeURIComponent(obj[key]),
 							"Path=/",
 							"Expires=" + d.toUTCString(),
 							"SameSite=Strict"
@@ -302,7 +302,7 @@
 					document.cookie.split(";").forEach(function(cookie) {
 						var tokens = cookie.split("=");
 						if (tokens.length == 2) {
-							pastSort[tokens[0].trim()] = tokens[1].trim();
+							pastSort[decodeURIComponent(tokens[0].trim())] = decodeURIComponent(tokens[1].trim());
 						} // else no cookie
 					});
 					return pastSort;

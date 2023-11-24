@@ -1,4 +1,4 @@
-/*! Tablesaw - v3.1.2 - 2023-11-15
+/*! Tablesaw - v3.1.2 - 2023-11-24
 * https://github.com/filamentgroup/tablesaw
 * Copyright (c) 2023 Filament Group; Licensed MIT */
 /*! Shoestring - v2.0.0 - 2017-02-14
@@ -2905,7 +2905,12 @@ if (Tablesaw.mustard) {
 				function suggestDefault(heads) {
 					var past = retrieveSort();
 					var pastDefaultCol = heads.filter(function(index) {
-						return heads.eq(index).text().trim() === past.label;
+						return (
+							heads
+								.eq(index)
+								.text()
+								.trim() === past.label
+						);
 					});
 					if (pastDefaultCol.length > 0) {
 						el[pluginName]("makeColDefault", pastDefaultCol, past.order === "desc" ? false : true);
@@ -3018,7 +3023,7 @@ if (Tablesaw.mustard) {
 					d.setTime(d.getTime() + 1 * 24 * 60 * 1000);
 					for (var key in obj) {
 						document.cookie = [
-							key + "=" + obj[key],
+							encodeURIComponent(key) + "=" + encodeURIComponent(obj[key]),
 							"Path=/",
 							"Expires=" + d.toUTCString(),
 							"SameSite=Strict"
@@ -3031,7 +3036,7 @@ if (Tablesaw.mustard) {
 					document.cookie.split(";").forEach(function(cookie) {
 						var tokens = cookie.split("=");
 						if (tokens.length == 2) {
-							pastSort[tokens[0].trim()] = tokens[1].trim();
+							pastSort[decodeURIComponent(tokens[0].trim())] = decodeURIComponent(tokens[1].trim());
 						} // else no cookie
 					});
 					return pastSort;
