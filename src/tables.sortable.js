@@ -63,6 +63,7 @@
 				var tblsaw = el.data("tablesaw");
 				var heads;
 				var $switcher;
+				var sortOptions = ["label", "order"];
 
 				function addClassToHeads(h) {
 					$.each(h, function(i, v) {
@@ -171,12 +172,14 @@
 				function suggestDefault(heads) {
 					var past = retrieveSort();
 					var pastDefaultCol = heads.filter(function(index) {
-						return (
-							heads
-								.eq(index)
-								.text()
-								.trim() === past.label
-						);
+						var head_label = heads
+							.eq(index)
+							.text()
+							.trim();
+						// Encode-then-decode to ensure special characters are handled consistently
+						// as in setCookie/getCookie
+						head_label = decodeURIComponent(encodeURIComponent(head_label));
+						return head_label === past.label;
 					});
 					if (pastDefaultCol.length > 0) {
 						el[pluginName]("makeColDefault", pastDefaultCol, past.order === "desc" ? false : true);
@@ -284,27 +287,54 @@
 					});
 				}
 
-				function memorizeSort(obj) {
+				function setCookie(name, value) {
 					var d = new Date();
-					d.setTime(d.getTime() + 1 * 24 * 60 * 1000);
-					for (var key in obj) {
-						document.cookie = [
-							encodeURIComponent(key) + "=" + encodeURIComponent(obj[key]),
-							"Path=/",
-							"Expires=" + d.toUTCString(),
-							"SameSite=Strict"
-						].join(";");
+					d.setTime(d.getTime() + 1 * 24 * 60 * 1000); // Expire 24 hrs
+					document.cookie = [
+						encodeURIComponent(name) + "=" + encodeURIComponent(value),
+						"Path=/",
+						"Expires=" + d.toUTCString(),
+						"SameSite=Strict"
+					].join(";");
+				}
+
+				function getCookie(name) {
+					var normalizedName = decodeURIComponent(encodeURIComponent(name.trim()));
+					var normalizedValue = undefined;
+					document.cookie.split(";").forEach(function(cookie) {
+						var tokens = cookie.split("=");
+						var normalizedKey = decodeURIComponent(tokens[0].trim());
+						if (tokens.length === 2 && normalizedKey === normalizedName) {
+							normalizedValue = decodeURIComponent(tokens[1].trim());
+						}
+					});
+					return normalizedValue;
+				}
+
+				function memorizeSort(obj) {
+					for (var i = 0, l = sortOptions.length; i < l; i++) {
+						var key = sortOptions[i];
+						if (obj[key]) {
+							if (key === "order" && obj[key] !== "asc" && obj[key] !== "desc") {
+								return; // invalid order
+							}
+							setCookie(key, obj[key]);
+						}
 					}
 				}
 
 				function retrieveSort() {
 					var pastSort = {};
-					document.cookie.split(";").forEach(function(cookie) {
-						var tokens = cookie.split("=");
-						if (tokens.length == 2) {
-							pastSort[decodeURIComponent(tokens[0].trim())] = decodeURIComponent(tokens[1].trim());
-						} // else no cookie
-					});
+					for (var i = 0, l = sortOptions.length; i < l; i++) {
+						var key = sortOptions[i];
+						var value = getCookie(key);
+						if (value) {
+							if (key === "order" && value !== "asc" && value !== "desc") {
+								return {}; // invalid order
+							}
+							pastSort[key] = value;
+						}
+					}
 					return pastSort;
 				}
 
