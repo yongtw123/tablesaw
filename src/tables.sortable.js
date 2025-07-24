@@ -176,9 +176,6 @@
 							.eq(index)
 							.text()
 							.trim();
-						// Encode-then-decode to ensure special characters are handled consistently
-						// as in setCookie/getCookie
-						head_label = decodeURIComponent(encodeURIComponent(head_label));
 						return head_label === past.label;
 					});
 					if (pastDefaultCol.length > 0) {
@@ -287,28 +284,28 @@
 					});
 				}
 
-				function setCookie(name, value) {
-					var d = new Date();
-					d.setTime(d.getTime() + 1 * 24 * 60 * 1000); // Expire 24 hrs
-					document.cookie = [
-						encodeURIComponent(name) + "=" + encodeURIComponent(value),
-						"Path=/",
-						"Expires=" + d.toUTCString(),
-						"SameSite=Strict"
-					].join(";");
+				function setStorage(name, value) {
+					try {
+						if (typeof Storage !== "undefined" && localStorage) {
+							var key = pluginName + "-" + encodeURIComponent(name.trim());
+							localStorage.setItem(key, encodeURIComponent(value));
+						}
+					} catch (e) {
+						// localStorage not available or quota exceeded - silently fail
+					}
 				}
 
-				function getCookie(name) {
-					var normalizedName = decodeURIComponent(encodeURIComponent(name.trim()));
-					var normalizedValue = undefined;
-					document.cookie.split(";").forEach(function(cookie) {
-						var tokens = cookie.split("=");
-						var normalizedKey = decodeURIComponent(tokens[0].trim());
-						if (tokens.length === 2 && normalizedKey === normalizedName) {
-							normalizedValue = decodeURIComponent(tokens[1].trim());
+				function getStorage(name) {
+					try {
+						if (typeof Storage !== "undefined" && localStorage) {
+							var key = pluginName + "-" + encodeURIComponent(name.trim());
+							var value = localStorage.getItem(key);
+							return value ? decodeURIComponent(value) : undefined;
 						}
-					});
-					return normalizedValue;
+					} catch (e) {
+						// localStorage not available - silently fail
+					}
+					return undefined;
 				}
 
 				function memorizeSort(obj) {
@@ -318,7 +315,7 @@
 							if (key === "order" && obj[key] !== "asc" && obj[key] !== "desc") {
 								return; // invalid order
 							}
-							setCookie(key, obj[key]);
+							setStorage(key, obj[key]);
 						}
 					}
 				}
@@ -327,7 +324,7 @@
 					var pastSort = {};
 					for (var i = 0, l = sortOptions.length; i < l; i++) {
 						var key = sortOptions[i];
-						var value = getCookie(key);
+						var value = getStorage(key);
 						if (value) {
 							if (key === "order" && value !== "asc" && value !== "desc") {
 								return {}; // invalid order
